@@ -1,23 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import {useCallback, useEffect, useState} from "react";
 
 function App() {
+  const [adPreferencesValue, setAdPreferencesValue] = useState("");
+  const [currentAdPreferencesValue, setCurrentAdPreferencesValue] = useState("");
+
+  /* Emulate vendor.js. Listen preferences value from extension */
+  useEffect(() => {
+    window.addEventListener('message', (event) => {
+      if (event.data.type === "ExtensionLoaded") {
+        window.postMessage({type: 'GetAdPreferences'}, '*');
+      }
+      if (event.data.type === "AdPreferences") {
+        console.log("React skeleton application, preferences received", event.data);
+        setCurrentAdPreferencesValue(event.data.data);
+      }
+    });
+  }, []);
+
+  /* Emulate vendor.js. Update preferences when tab becomes active START */
+  const handleVisibilityChange = useCallback(() => {
+    if (document.visibilityState === 'visible') {
+      window.postMessage({type: 'GetAdPreferences'}, '*')
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [handleVisibilityChange]);
+  /* Emulate vendor.js. Update preferences when tab becomes active END */
+
+  /* Emulate YAC Web Url. Emulate update preferences */
+  const savePreferences = () => {
+    setAdPreferencesValue("");
+    window.postMessage({type: 'UpdateAdPreferences', data: adPreferencesValue}, '*');
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{backgroundColor: "#D6D9DC"}}>
+        <p>Emulate vendor.js:</p>
+        <p>Current (extension) ad preferences value: {currentAdPreferencesValue}</p>
+      </div>
+      <br/><br/><br/><br/><br/><br/>
+      <div style={{backgroundColor: "#EDF5FD"}}>
+        <p>Emulate YAC web url:</p>
+        <label htmlFor="value">New ad preferences value: </label>
+        <input id="value" type="text" value={adPreferencesValue} onChange={(e) => setAdPreferencesValue(e.target.value)}/>
+        <button onClick={savePreferences} disabled={!adPreferencesValue.length}>Submit ad preferences</button>
+      </div>
     </div>
   );
 }
