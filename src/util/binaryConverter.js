@@ -93,6 +93,11 @@ export const convertToObj = (binary, binaryConfig) => {
 
         for (const arrayKey of Object.keys(arrayDataConfig)) {
           const arrayValueConfig = binaryConfig[key][arrayKey];
+
+          if (typeof arrayValueConfig === "number") {
+            throw new Error(`PMC V2. Could not process array value. Property type "${typeof binaryConfig[key][arrayKey]}" could not be handled.`)
+          }
+
           const splitBinary = binary.substring(currentIndex, currentIndex + arrayValueConfig);
 
           resultedData[arrayKey] = binaryToDecimal(splitBinary);
