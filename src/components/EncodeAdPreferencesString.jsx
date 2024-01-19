@@ -71,7 +71,7 @@ export const EncodeAdPreferencesString = () => {
 
   return (
     <div style={{backgroundColor: "#cbf5dd", padding: "20px"}}>
-      <p>Encode ad preferences string</p>
+      <p>Encode ad preferences string:</p>
       <div>
         <textarea
           cols="80"

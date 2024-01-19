@@ -25,7 +25,7 @@ export const DecodeAdPreferencesString = () => {
 
   return (
     <div style={{backgroundColor: "#FFFFE0", padding: "20px"}}>
-      <p>Decode ad preferences string</p>
+      <p>Decode ad preferences string:</p>
       <label>Base64: <input style={{width: "500px"}} onChange={e => setBase64(e.target.value)}/></label>
       {error && <div style={{color: "red"}}>{error}</div>}
       <button onClick={decode}>Decode</button><br/><br/>
