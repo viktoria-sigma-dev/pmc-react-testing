@@ -1,4 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
+import {EncodeAdPreferencesString} from "./components/EncodeAdPreferencesString";
+import {DecodeAdPreferencesString} from "./components/DecodeAdPreferencesString";
 
 function App() {
   const [adPreferencesValue, setAdPreferencesValue] = useState("");
@@ -39,7 +41,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App" style={{paddingBottom: "200px"}}>
       <div style={{backgroundColor: "#D6D9DC"}}>
         <p>Emulate vendor.js:</p>
         <p>Current (extension) ad preferences value: {currentAdPreferencesValue}</p>
@@ -51,6 +53,10 @@ function App() {
         <input id="value" type="text" value={adPreferencesValue} onChange={(e) => setAdPreferencesValue(e.target.value)}/>
         <button onClick={savePreferences} disabled={!adPreferencesValue.length}>Submit ad preferences</button>
       </div>
+      <br/><br/><br/><br/><br/><br/>
+      <EncodeAdPreferencesString/>
+      <br/><br/><br/><br/><br/><br/>
+      <DecodeAdPreferencesString/>
     </div>
   );
 }
