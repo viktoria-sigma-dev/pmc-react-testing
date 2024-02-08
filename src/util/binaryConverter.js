@@ -1,36 +1,36 @@
 /**
- * Helper function to convert a decimal number to a binary string with specified length.
+ * Helper function to convert a decimal number to a binary with specified length.
  *
  * @param {number} decimalValue - The decimal number to be converted to binary.
- * @param {number} binaryLength - The desired length of the resulting binary string.
+ * @param {number} binaryLength - The desired length of the resulting binary.
  * @returns {string} - Binary representation of the decimal value with leading zeros.
  */
 const decimalToBinary = (decimalValue, binaryLength) => {
-  const binaryString = decimalValue.toString(2);
-  const leadingZeros = '0'.repeat(binaryLength - binaryString.length);
-  return leadingZeros + binaryString;
+  const binary = decimalValue.toString(2);
+  const leadingZeros = '0'.repeat(binaryLength - binary.length);
+  return leadingZeros + binary;
 }
 
 /**
- * Converts a binary string to a decimal value.
+ * Converts a binary to a decimal value.
  *
- * @param {string} binaryString - The binary string to be converted to decimal.
- * @returns {number} - The decimal value converted from the binary string.
+ * @param {string} binary - The binary to be converted to decimal.
+ * @returns {number} - The decimal value converted from the binary.
  */
-const binaryToDecimal = (binaryString) => {
-  return parseInt(binaryString, 2);
+const binaryToDecimal = (binary) => {
+  return parseInt(binary, 2);
 };
 
 /**
- * Convert an object's decimal values to a binary string.
+ * Convert an object's decimal values to a binary.
  *
  * @param {object} obj - The input object to be converted.
  * @param {object} binaryConfig - The binary config.
  * @throws {Error} If a property in the input object does not have a corresponding value in binaryConfig.
- * @returns {string} - Binary string representing the converted decimal values.
+ * @returns {string} - Binary representing the converted decimal values.
  */
 export const convertToBinary = (obj, binaryConfig) => {
-  let binaryString = '';
+  let binary = '';
 
   for (const key in obj) {
     if (!binaryConfig.hasOwnProperty(key)) {
@@ -42,21 +42,26 @@ export const convertToBinary = (obj, binaryConfig) => {
         throw new Error(`PMC V2. Could not process array. Property "arrayLength" does not exist in binary config. ${JSON.stringify(binaryConfig[key])}`)
       }
 
-      binaryString += decimalToBinary(obj[key].length, binaryConfig[key].arrayLength);
+      binary += decimalToBinary(obj[key].length, binaryConfig[key].arrayLength);
 
       for (const item of obj[key]) {
         for (const itemKey in item) {
           if (!binaryConfig[key].hasOwnProperty(itemKey)) {
             throw new Error(`PMC V2. Could not process array. Property "${itemKey}" does not exist in binary config. ${JSON.stringify(binaryConfig[key])}`)
           }
-          binaryString += decimalToBinary(item[itemKey], binaryConfig[key][itemKey]);
+          binary += decimalToBinary(item[itemKey], binaryConfig[key][itemKey]);
         }
       }
     } else {
-      binaryString += decimalToBinary(obj[key], binaryConfig[key]);
+      binary += decimalToBinary(obj[key], binaryConfig[key]);
     }
   }
-  return binaryString;
+
+  if (binary.length % 8 !== 0) {
+    binary += '0'.repeat(8 - binary.length % 8); // add zeros to the end of the binary to have correct 8-bit binary
+  }
+
+  return binary;
 }
 
 /**
@@ -100,7 +105,7 @@ export const convertToObj = (binary, binaryConfig) => {
 
           const splitBinary = binary.substring(currentIndex, currentIndex + arrayValueConfig);
 
-          resultedData[arrayKey] = binaryToDecimal(splitBinary);
+          resultedData[arrayKey] = splitBinary.length ? binaryToDecimal(splitBinary) : null;
           currentIndex += arrayValueConfig;
         }
 
