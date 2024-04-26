@@ -1,6 +1,8 @@
-import {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {EncodeAdPreferencesString} from "./components/EncodeAdPreferencesString";
 import {DecodeAdPreferencesString} from "./components/DecodeAdPreferencesString";
+import {CountrySelection} from "./components/CountrySelection";
+import {GPCAvailability} from "./components/GPCAvailability";
 
 function App() {
   const [adPreferencesValue, setAdPreferencesValue] = useState("");
@@ -40,6 +42,11 @@ function App() {
     window.postMessage({type: 'UpdateAdPreferences', data: adPreferencesValue}, '*');
   }
 
+  /* Emulate YAC Web Url. Emulate return user country */
+  const onCountrySelectionSave = (data) => {
+    window.postMessage({type: 'SetUserLocation', data}, '*');
+  }
+
   return (
     <div className="App" style={{paddingBottom: "200px"}}>
       <div style={{backgroundColor: "#D6D9DC"}}>
@@ -52,6 +59,12 @@ function App() {
         <label htmlFor="value">New ad preferences value: </label>
         <input id="value" type="text" value={adPreferencesValue} onChange={(e) => setAdPreferencesValue(e.target.value)}/>
         <button onClick={savePreferences} disabled={!adPreferencesValue.length}>Submit ad preferences</button>
+        <hr/>
+        <CountrySelection
+          onSave={onCountrySelectionSave}
+        />
+        <hr/>
+        <GPCAvailability/>
       </div>
       <br/><br/><br/><br/><br/><br/>
       <EncodeAdPreferencesString/>
