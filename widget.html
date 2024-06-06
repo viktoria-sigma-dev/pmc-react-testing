@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Widget</title>
+    <style>
+        .widget-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+
+        .widget-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .widget-button:hover {
+            background-color: #0056b3;
+        }
+
+        .company-list {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            right: 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .select-all-button,
+        .save-choices-button {
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .select-all-button:hover,
+        .save-choices-button:hover {
+            background-color: #0056b3;
+        }
+
+        .widget-button:active {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+<div class="widget-container">
+    <button class="widget-button" onclick="toggleCompanyList()">Open Opt out companies</button>
+    <div class="company-list" style="display: none;"> <!-- Initially hidden -->
+        <label><input type="checkbox" value="company1"> Company 1</label><br>
+        <label><input type="checkbox" value="company2"> Company 2</label><br>
+        <label><input type="checkbox" value="company3"> Company 3</label><br>
+        <button class="select-all-button" onclick="toggleSelectAll()">Select all</button>
+        <button class="save-choices-button" onclick="saveChoices()">Save choices</button>
+    </div>
+</div>
+
+<script>
+  function toggleCompanyList() {
+    const companyList = document.querySelector('.company-list');
+    if (companyList.style.display === 'none') {
+      companyList.style.display = 'block';
+    } else {
+      companyList.style.display = 'none';
+    }
+  }
+
+  function toggleSelectAll() {
+    const checkboxes = document.querySelectorAll('.company-list input[type="checkbox"]');
+    const selectAllButton = document.querySelector('.select-all-button');
+    const allSelected = Array.from(checkboxes).every(checkbox => checkbox.checked);
+
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = !allSelected;
+    });
+
+    selectAllButton.textContent = allSelected ? 'Select all' : 'Unselect all';
+  }
+
+  function saveChoices() {
+    const checkboxes = document.querySelectorAll('.company-list input[type="checkbox"]:checked');
+    const choices = Array.from(checkboxes).map(checkbox => checkbox.value);
+    const origin = window.location.origin;
+
+    fetch('https://1ab8-188-190-253-115.ngrok-free.app/setChoice', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ origin, choices })
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(({ data }) => {
+        console.log('Choices saved successfully!', data);
+        // Additional logic if needed
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+  }
+
+  /*function setCookieLocally(data) {
+    const cookieName = 'localUserChoices';
+    const cookieValue = encodeURIComponent(data);
+    const expirationDays = 7; // Set cookie to expire in 7 days
+    const date = new Date();
+    date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
+    const expires = `; expires=${date.toUTCString()}`;
+    document.cookie = `${cookieName}=${cookieValue}${expires}; path=/; domain=${window.location.hostname};`;
+  }*/
+</script>
+</body>
+</html>
