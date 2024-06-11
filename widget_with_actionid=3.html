@@ -97,6 +97,7 @@
     fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=4&participant_id=512&token=1708017218477&rd=https%3A%2F%2Foptout.aboutads.info&noCache=${getRandomizedValue()}`, {
       method: 'GET',
       mode: 'no-cors',
+      credentials: 'include',
     })
       .then((response) => {
         console.log('response', response);
