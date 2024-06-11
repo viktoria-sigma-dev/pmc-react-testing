@@ -73,6 +73,9 @@
         <label><input type="checkbox" value="company3"> Company 3</label><br>
         <button class="select-all-button" onclick="toggleSelectAll()">Select all</button>
         <button class="save-choices-button" onclick="saveChoices()">Save choices</button>
+        <!--    Duplicate request from excel with action_id=4-->
+        <br/>
+        <button class="widget-button" onclick="duplicateOptOutRequestFromAboutAds()">Opt out companies with action_id=4</button>
     </div>
 </div>
 
@@ -119,14 +122,13 @@
       })
       .then(({ data }) => {
         console.log('Choices saved successfully!', data);
-        // Additional logic if needed
       })
       .catch(error => {
         console.error('Error sending data:', error);
       });
   }
 
-  /*function setCookieLocally(data) {
+  function setCookieLocally(data) {
     const cookieName = 'localUserChoices';
     const cookieValue = encodeURIComponent(data);
     const expirationDays = 7; // Set cookie to expire in 7 days
@@ -134,7 +136,25 @@
     date.setTime(date.getTime() + (expirationDays * 24 * 60 * 60 * 1000));
     const expires = `; expires=${date.toUTCString()}`;
     document.cookie = `${cookieName}=${cookieValue}${expires}; path=/; domain=${window.location.hostname};`;
-  }*/
+  }
+
+  function getRandomizedValue() {
+    // Generate a 13-digit random number
+    return Math.floor(Math.random() * 9e12) + 1e12;
+  }
+
+  function duplicateOptOutRequestFromAboutAds() {
+    fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=4&participant_id=512&token=1708017218477&rd=https%3A%2F%2Foptout.aboutads.info&noCache=${getRandomizedValue()}`, {
+      method: 'GET',
+      mode: 'no-cors',
+    })
+      .then((response) => {
+        console.log('response', response);
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+  }
 </script>
 </body>
 </html>
