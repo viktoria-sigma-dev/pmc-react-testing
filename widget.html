@@ -19,6 +19,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         .widget-button:hover {
@@ -73,9 +74,11 @@
         <label><input type="checkbox" value="company3"> Company 3</label><br>
         <button class="select-all-button" onclick="toggleSelectAll()">Select all</button>
         <button class="save-choices-button" onclick="saveChoices()">Save choices</button>
-        <!--    Duplicate request from excel with action_id=4-->
         <br/>
+        <!--    Duplicate request from excel with action_id=4-->
         <button class="widget-button" onclick="duplicateOptOutRequestFromAboutAds()">Opt out companies with action_id=4</button>
+        <!--    We need to send a request with action_id=3 in order to get the CSRF token that should be used in the request with action_id=4-->
+        <button class="widget-button" onclick="optOutCompanies()">Opt out companies with action_id=3</button>
     </div>
 </div>
 
@@ -151,6 +154,22 @@
     })
       .then((response) => {
         console.log('response', response);
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+  }
+
+  function optOutCompanies() {
+    fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=3&participant_id=512&rd=https%3A%2F%2Foptout.aboutads.info&noCache=${getRandomizedValue()}`, {
+      method: 'GET',
+      credentials: 'include',
+      accessControlExposeHeaders: Location
+    })
+      .then((response) => {
+        console.log('response', response);
+        console.log('response.headers.get(\'Location\');', response.headers.get('Location'));
+        console.log(...response.headers);
       })
       .catch(error => {
         console.error('Error sending data:', error);
