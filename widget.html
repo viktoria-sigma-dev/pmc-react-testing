@@ -163,8 +163,7 @@
   function optOutCompanies() {
     fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=3&participant_id=512&rd=https%3A%2F%2Foptout.aboutads.info&noCache=${getRandomizedValue()}`, {
       method: 'GET',
-      credentials: 'include',
-      accessControlExposeHeaders: Location
+      credentials: 'include'
     })
       .then((response) => {
         console.log('response', response);
