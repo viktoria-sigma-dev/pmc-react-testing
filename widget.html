@@ -22,6 +22,9 @@
             margin-top: 10px;
         }
 
+        .widget-button.iframe {
+            background-color: darkolivegreen;
+        }
         .widget-button:hover {
             background-color: #0056b3;
         }
@@ -79,6 +82,10 @@
         <button class="widget-button" onclick="duplicateOptOutRequestFromAboutAds()">Opt out companies with action_id=4</button>
         <!--    We need to send a request with action_id=3 in order to get the CSRF token that should be used in the request with action_id=4-->
         <button class="widget-button" onclick="optOutCompanies()">Opt out companies with action_id=3</button>
+        <button class="widget-button" onclick="optOutDemDexNgrok()">Opt out dem dex using ngrok</button>
+        <button class="widget-button iframe" onclick="optOutDemDex()">Opt out DemDex using action_id=3 (+iframe)</button>
+        <button class="widget-button iframe" onclick="optOutOutBrain()">Opt out OutBrain using action_id=3 (+iframe)</button>
+        <button class="widget-button iframe" onclick="optOutIQM()">Opt out IQM using action_id=3 (+iframe)</button>
     </div>
 </div>
 
@@ -161,9 +168,9 @@
   }
 
   function optOutCompanies() {
-    fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=3&participant_id=512&rd=https%3A%2F%2Foptout.aboutads.info&noCache=${getRandomizedValue()}`, {
+    fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=3&participant_id=512&rd=https%3A%2F%2F85bb-188-190-253-115.ngrok-free.app&noCache=${getRandomizedValue()}`, {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((response) => {
         console.log('response', response);
@@ -172,6 +179,106 @@
       })
       .catch(error => {
         console.error('Error sending data:', error);
+      });
+  }
+
+  function optOutDemDexNgrok() {
+    fetch(`https://www.demdex.net/daa/daa_opt.html?action_id=3&participant_id=512&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`, {
+      method: 'GET',
+      mode: 'no-cors',
+      credentials: 'include',
+    })
+      .then(response => {
+        console.log("response 1", response);
+        return response.json();
+      })
+      .then((response) => {
+        console.log("response 2", response);
+        const data = response.data;
+        console.log("First response received:", data);
+
+        const url = `https://www.demdex.net/daa/daa_opt.html?action_id=4&participant_id=${data.participantId}&token=${data.token}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
+
+        return fetch(url, {
+          method: 'GET',
+          mode: 'no-cors',
+          credentials: 'include',
+        });
+      })
+      .then(response => {
+        console.log("Second request sent, response:", response);
+      })
+      .catch(error => {
+        console.error('Error sending data:', error);
+      });
+  }
+
+  function optOutDemDex() {
+    const participantId = 512;
+    const url = 'https://www.demdex.net/daa/daa_opt.html';
+
+    createIframeChains(participantId, url)
+      .then((data) => {
+        console.log("Data received:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+  function optOutOutBrain() {
+    const participantId = 756;
+    const url = 'https://nai.outbrain.com';
+
+    createIframeChains(participantId, url)
+      .then((data) => {
+        console.log("Data received:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
+
+  function createIframeChains(participantId, url) {
+    return new Promise((resolve, reject) => {
+      const firstUrl = `${url}?action_id=3&participant_id=${participantId}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
+
+      const firstIframe = document.createElement('iframe');
+      firstIframe.src = firstUrl;
+      firstIframe.style.display = 'none';
+      document.body.appendChild(firstIframe);
+
+      firstIframe.onload = () => {
+        const redirectedURL = firstIframe.contentWindow.location.href;
+        const urlParts = redirectedURL.split('/');
+        const token = urlParts[urlParts.length - 1];
+        const secondUrl = `${url}?action_id=4&participant_id=${participantId}&token=${token}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
+
+        const secondIframe = document.createElement('iframe');
+        secondIframe.src = secondUrl;
+        secondIframe.style.display = 'none'; // Hide the iframe
+        document.body.appendChild(secondIframe);
+
+        secondIframe.onload = () => {
+          resolve(secondIframe.contentWindow.location.href);
+        };
+      };
+
+      firstIframe.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
+
+  function optOutIQM() {
+    const participantId = 789;
+    const url = 'https://pxl.iqm.com/api/v1/twb/opt_out';
+
+    createIframeChains(participantId, url)
+      .then((data) => {
+        console.log("Data received:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
       });
   }
 </script>
