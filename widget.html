@@ -101,20 +101,16 @@
         <hr/>
     </div>-->
     <div class="company-list">
-
         <h2><b>chain with iframe src:</b></h2>
         <div id="iframe-src-button-container"></div>
         <hr/>
         <h2><b>chain with multiple fetches:</b></h2>
         <div id="multiple-fetches-button-container"></div>
-        <hr/>
-        <button class="widget-button" onclick="optOutAll()">Opt out all</button>
     </div>
 </div>
 
 <script>
   const successInOptOutAboutAds = "Request is success";
-  const blockedInOptOutAboutAds = "(TODO test in incognito) Request is blocked:other";
   const status = {
     fail: 'fail',
     success: 'success',
@@ -353,29 +349,6 @@
         reject(error);
       };
     });
-  }
-
-  function optOutAll() {
-    fetch('https://85bb-188-190-253-115.ngrok-free.app/optOutAll', {
-      credentials: 'include',
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => {
-        console.log('response - ', response);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((response) => {
-        console.log('Opted out all successfully!', response);
-      })
-      .catch(error => {
-        console.error('Error sending data:', error);
-      });
   }
 </script>
 </body>
