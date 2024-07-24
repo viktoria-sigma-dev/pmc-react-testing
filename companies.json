@@ -5,12 +5,12 @@
       "name": "33Across",
       "trigger": [
         {
-          "url": "https://optout.33across.com/api",
+          "url": "https://optout.33across.com/api/",
           "participantId": 258,
           "daaParticipant": "00236"
         },
         {
-          "url": "https://optout.tynt.com/api",
+          "url": "https://optout.33across.com/api/",
           "participantId": 488,
           "daaParticipant": "00236"
         }
@@ -503,7 +503,7 @@
       "name": "Magnite",
       "trigger": [
         {
-          "url": "https://pixel.rubiconproject.com/oba/optout",
+          "url": "https://pixel.rubiconproject.com/oba/optout/",
           "participantId": 366,
           "daaParticipant": "01383"
         },
@@ -633,7 +633,7 @@
       "name": "Outbrain",
       "trigger": [
         {
-          "url": "https://nai.outbrain.com",
+          "url": "https://nai.outbrain.com/",
           "participantId": 756,
           "daaParticipant": "01243"
         }
@@ -673,7 +673,7 @@
       "name": "PulsePoint",
       "trigger": [
         {
-          "url": "https://bh.contextweb.com/bh/oba/aboutads",
+          "url": "https://bh.contextweb.com/bh/oba/aboutads/",
           "participantId": 422,
           "daaParticipant": "00613"
         }
@@ -856,7 +856,7 @@
       "name": "Taboola",
       "trigger": [
         {
-          "url": "https://optout.taboola.com",
+          "url": "https://optout.taboola.com/",
           "participantId": 673,
           "daaParticipant": "01211"
         }
@@ -1050,7 +1050,7 @@
       "name": "Zeta Global",
       "trigger": [
         {
-          "url": "https://disqus.com/privacy/optout",
+          "url": "https://disqus.com/privacy/optout/",
           "participantId": 817,
           "daaParticipant": "01342"
         }

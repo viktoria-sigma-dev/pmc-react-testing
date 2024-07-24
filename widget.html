@@ -3,46 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CSS Widget</title>
+    <title>CCPA Tool</title>
     <style>
         .widget-container {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 400px;
+            bottom: 0;
+            right: 0;
+            width: 300px;
         }
 
         .widget-button {
             display: inline-block;
-            background-color: #007bff;
-            padding: 10px 20px;
+            background-color: #01AECD;
+            color: #FFFFFF;
+            font-family: 'Lato', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
             width: 100%;
-        }
-        .widget-button.olive {
-            color: #fff;
-            background-color: olive;
-        }
-
-        .widget-button.lightgray {
-            color: black;
-            background-color: lightgray;
-        }
-        .widget-button.lightgrey {
-            color: black;
-            background-color: lightgrey;
-        }
-        .widget-button.fail {
-            border: 2px solid red;
-        }
-        .widget-button.success, .widget-button.successWhenNoAdBlocker {
-            border: 2px solid limegreen;
-        }
-        .widget-button:hover {
-            background-color: darkgrey;
+            text-align: center;
         }
 
         .company-list {
@@ -53,70 +36,38 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 10px;
-            max-height: 300px;
+            max-height: 270px;
             overflow-y: auto;
+            display: none;
         }
 
-        .select-all-button,
-        .save-choices-button {
-            margin-top: 10px;
-            background-color: #007bff;
-            color: #fff;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-            display: block;
-            margin-bottom: 5px;
+        .widget-button:disabled {
+            background-color: #00accd;
         }
 
-        .select-all-button:hover,
-        .save-choices-button:hover {
-            background-color: #0056b3;
-        }
-
-        .widget-button:active {
-            background-color: #004080;
+        .widget-button:hover, .widget-button:active {
+            background-color: #0097b3;
         }
     </style>
 </head>
 <body>
 <div class="widget-container">
-    <button class="widget-button" onclick="toggleCompanyList()">Open Opt out companies</button>
-    <!--<div class="company-list" style="display: none;"> &lt;!&ndash; Initially hidden &ndash;&gt;
-        <label><input type="checkbox" value="company1"> Company 1</label><br>
-        <label><input type="checkbox" value="company2"> Company 2</label><br>
-        <label><input type="checkbox" value="company3"> Company 3</label><br>
-        <button class="select-all-button" onclick="toggleSelectAll()">Select all</button>
-        <button class="save-choices-button" onclick="saveChoices()">Save choices</button>
-        <br/>
-        &lt;!&ndash;    Duplicate request from excel with action_id=4&ndash;&gt;
-        <button class="widget-button" onclick="duplicateOptOutRequestFromAboutAds()">Opt out companies with action_id=4</button>
-        &lt;!&ndash;    We need to send a request with action_id=3 in order to get the CSRF token that should be used in the request with action_id=4&ndash;&gt;
-        <button class="widget-button" onclick="optOutDemDexNgrok()">Opt out dem dex using action_id=3 and action_id=4</button>
-        <hr/>
-    </div>-->
-    <div class="company-list">
-        <h2><b>chain with iframe src:</b></h2>
-        <div id="iframe-src-button-container"></div>
-        <hr/>
-        <h2><b>chain with multiple fetches:</b></h2>
-        <div id="multiple-fetches-button-container"></div>
-    </div>
+    <div class="company-list"><div id="company-list-content"></div></div>
+    <button class="widget-button" onclick="toggleCompanyList()">Toggle Opt out modal</button>
+    <button class="widget-button" onclick="optOutAll()">Opt out companies</button>
 </div>
 
 <script>
+  const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
+  let companies = JSON.parse(localStorage.getItem('optOutCompanies') || '[]');
+
   const successInOptOutAboutAds = "Request is success";
   const status = {
     fail: 'fail',
     success: 'success',
     successWhenNoAdBlocker: 'successWhenNoAdBlocker',
   }
-  const companiesToOptOut = [
+  const analysedCompanies = [
     {participantId: 512, name: 'Adobe Marketing Cloud - Advertising Services', url: 'https://www.demdex.net/daa/daa_opt.html', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['no-url, request went right to action_id=4', 'https://optout.aboutads.info/finish/512/4/1/']},
     {participantId: 789, name: 'IQM', url: 'https://pxl.iqm.com/api/v1/twb/opt_out', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/789/1/29c20b7f96c7d51421db9667dc879d78', 'https://optout.aboutads.info/finish/789/4/1']},
     {participantId: 756, name: 'OutBrain', url: 'https://nai.outbrain.com', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/756/1-1/4e88341cb0b64fae985401c4e618c638', 'https://optout.aboutads.info/finish/756/4/1-1/']},
@@ -143,65 +94,52 @@
     {participantId: 809, name: 'Cadent', url: 'https://choices.adhaven.com/choices/daa/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/809/1-2/', 'https://optout.aboutads.info/finish/809/4/1-1/']},
   ];
 
-  // Create companies with opting out in iframe src
-  const iframeSrcButtonContainer = document.getElementById('iframe-src-button-container');
-  companiesToOptOut.forEach(company => {
-    const button = document.createElement('button');
-    button.className = `widget-button lightgrey ${company.status}`;
-    button.innerText = company.name;
-    button.onclick = () => invokeOptOutCompany(company, createIframeChainsWithNavigation);
-    if (company.hint) {
-      button.title = `Status on https://optout.aboutads.info/: ${company.hint}`;
-    }
-    iframeSrcButtonContainer.appendChild(button);
-  });
+  function renderCompanyList() {
+    const companyListContainer = document.getElementById('company-list-content');
+    companyListContainer.innerHTML = '';
 
-  // Create companies with opting out when multiple fetches
-  const multipleFetchesButtonContainer = document.getElementById('multiple-fetches-button-container');
-  companiesToOptOut.slice(0, 5).forEach(company => {
-    const button = document.createElement('button');
-    button.className = `widget-button lightgray ${company.status}`;
-    button.innerText = company.name;
-    button.onclick = () => invokeOptOutCompany(company, createChainWithFetches);
-    if (company.hint) {
-      button.title = `Status on https://optout.aboutads.info/: ${company.hint}`;
-    }
-    multipleFetchesButtonContainer.appendChild(button);
-  });
+    companies.forEach(company => {
+      const companyItem = document.createElement('button');
+      companyItem.className = 'widget-button';
+      companyItem.title = `ID: ${company.participantId}`;
+      companyItem.innerText = company.name;
+      companyItem.onclick = () => invokeOptOutIndividualCompany(company, createIframeChains);
+      companyListContainer.appendChild(companyItem);
+    });
+  }
 
   function toggleCompanyList() {
     const companyList = document.querySelector('.company-list');
-    if (companyList.style.display === 'none') {
+    if (companyList.style.display === 'none' || companyList.style.display === '') {
       companyList.style.display = 'block';
+      renderCompanyList(companies);
     } else {
       companyList.style.display = 'none';
     }
   }
 
+  const invokeOptOutIndividualCompany = (company, cb) => {
+    const promises = company.trigger.map(actionTrigger =>
+      handleOptOutForParticipantId(company.name, actionTrigger, cb)
+    );
 
+    return Promise.all(promises).catch(() => {});
+  };
 
-  function getRandomizedValue() {
-    // Generate a 13-digit random number
-    return Math.floor(Math.random() * 9e12) + 1e12;
-  }
-
-
-
-  /* Common function */
-
-  function invokeOptOutCompany(company, cb) {
-    cb(company.participantId, company.url)
-      .then((data) => {
-        console.log(`Data response from ${company.name}:`, data);
-        if (!company.hasOwnProperty('status')) {
+  function handleOptOutForParticipantId(companyName, actionTrigger, cb) {
+    const analysedCompany = analysedCompanies.find(company => company.participantId === actionTrigger.participantId);
+    return cb(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant)
+      .then(({url}) => {
+        console.log(`Data response from ${companyName} with participantId ${actionTrigger.participantId}:`, url);
+        if (!analysedCompany?.hasOwnProperty('status')) {
           return;
         }
 
-        if (company.status === status.success || company.status === status.successWhenNoAdBlocker) {
+        if (analysedCompany.status === status.success || analysedCompany.status === status.successWhenNoAdBlocker) {
           console.log('Company was successful on https://optout.aboutads.info/ as well.');
 
-          const responseUrlPath = new URL(data).pathname;
-          const expectedUrlPath = new URL(company.exactUrls[company.exactUrls.length - 1]).pathname;
+          const responseUrlPath = new URL(url).pathname;
+          const expectedUrlPath = new URL(analysedCompany.exactUrls[analysedCompany.exactUrls.length - 1]).pathname;
           if (expectedUrlPath === responseUrlPath) {
             console.log('Final url is the same.');
           } else {
@@ -212,8 +150,11 @@
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
-        if (company.status === status.success || company.status === status.successWhenNoAdBlocker) {
+        console.error(`Error for ${companyName} with participantId ${actionTrigger.participantId}:`, error);
+        if (!analysedCompany) {
+          return;
+        }
+        if (analysedCompany.status === status.success || analysedCompany.status === status.successWhenNoAdBlocker) {
           console.error('Company was successful on https://optout.aboutads.info/. Currently it`s errored');
         } else {
           console.log('Company had an error on https://optout.aboutads.info/ as well.');
@@ -221,65 +162,144 @@
       });
   }
 
-  /* ChainWithMultipleFetches */
+  // ----------------- Production codebase
+  function optOutAll() {
+    const promises = [];
+    const batchSize = 10; // Number of requests to send at a time
+    const delay = 500; // Delay between batches in milliseconds
 
-  function createChainWithFetches(participantId, url) {
-    const firstUrl = `${url}?action_id=3&participant_id=${participantId}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
-
-    return fetch(firstUrl)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const redirectedURL = response.url;
-        const urlParts = redirectedURL.split('/');
-        const token = urlParts[urlParts.length - 1];
-
-        const secondUrl = `${url}?action_id=4&participant_id=${participantId}&token=${token}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
-
-        return fetch(secondUrl)
-          .then(response => {
-            return response.url;
-          });
+    const tempCompanies = companies.slice(0,15);
+    tempCompanies.forEach(company => {
+      company.trigger.forEach(actionTrigger => {
+        promises.push(createIframeChains(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant));
       });
+    });
+
+    executeInBatches(promises, batchSize, delay);
   }
 
-  /* Chain with fetches in iframe navigate */
+  function executeInBatches(promises, batchSize, delay) {
+    let batchIndex = 0;
+    let allResults = [];
 
-  function createIframeChainsWithNavigation(participantId, url) {
+    function executeBatch() {
+      const batchPromises = promises.slice(batchIndex, batchIndex + batchSize);
+      return Promise.allSettled(batchPromises)
+        .then((results) => {
+          allResults = allResults.concat(results);
+          batchIndex += batchSize;
+          if (batchIndex < promises.length) {
+            setTimeout(executeBatch, delay);
+          } else {
+            console.log("Detailed results", allResults);
+            const failures = allResults.filter(result => result.status === 'rejected').length;
+            console.log(`All actions completed. Number of companies with failures: ${failures}`);
+            const successfulDaaParticipants = allResults.filter(result => result.status === 'fulfilled').map(result => result.value.daaParticipant);
+            console.log(`Successful daa participants`, successfulDaaParticipants);
+          }
+        })
+        .catch(error => {
+          console.error('Error during batch execution:', error);
+        });
+    }
+
+    executeBatch();
+  }
+
+  function getIframeUrl({originUrl, actionId, participantId, token, location}) {
+    function getRandomizedValue() {
+      return Math.floor(Math.random() * 9e12) + 1e12;
+    }
+
+    return `${originUrl}?action_id=${actionId}&participant_id=${participantId}&${token ? `token=${token}&` : ''}rd=${encodeURIComponent(location)}&noCache=${getRandomizedValue()}`;
+  }
+
+  function createIframeChains(participantId, url, daaParticipant) {
     return new Promise((resolve, reject) => {
-      const firstUrl = `${url}?action_id=3&participant_id=${participantId}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
-
+      let resolvedURL;
       const firstIframe = document.createElement('iframe');
-      firstIframe.src = firstUrl;
+      firstIframe.src = getIframeUrl({originUrl: url, actionId: 3, participantId, location: window.location.origin});
       firstIframe.style.display = 'none';
       document.body.appendChild(firstIframe);
 
       firstIframe.onload = () => {
-        const redirectedURL = firstIframe.contentWindow.location.href;
-        const urlParts = redirectedURL.split('/');
-        const token = urlParts[urlParts.length - 1];
-        const secondUrl = `${url}?action_id=4&participant_id=${participantId}&token=${token}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
-
+        try {
+            resolvedURL = firstIframe.contentWindow.location.href;
+        } catch (error) {
+          reject(error.message);
+          return;
+        }
+        const urlParts = resolvedURL.split('/');
         const secondIframe = document.createElement('iframe');
-        secondIframe.src = secondUrl;
-        secondIframe.style.display = 'none'; // Hide the iframe
+        secondIframe.src = getIframeUrl({originUrl: url, actionId: 4, participantId, token: urlParts[urlParts.length - 1], location: window.location.origin});
+        secondIframe.style.display = 'none';
         document.body.appendChild(secondIframe);
 
         secondIframe.onload = () => {
-          resolve(secondIframe.contentWindow.location.href);
+          try {
+            const secondIframeLocation = secondIframe.contentWindow.location.href;
+            resolve({url: secondIframeLocation, daaParticipant});
+          } catch (error) {
+            reject({error: error.message, participantId});
+          }
         };
 
         secondIframe.onerror = (error) => {
-          reject(error);
+          reject({error: error.message, participantId});
         };
+
       };
 
       firstIframe.onerror = (error) => {
-        reject(error);
+        reject({error: error.message, participantId});
       };
     });
   }
+
+  function disableOptOut() {
+    const buttons = document.querySelectorAll('.widget-button');
+    buttons.forEach(button => {
+      button.disabled = true;
+      button.title = "Currently not available";
+    });
+  }
+
+  function hideOptOut() {
+    const container = document.querySelector('.widget-container');
+    container.style.display = 'none';
+  }
+
+  function initializeWidget() {
+    if (Array.isArray(companies) && companies.length > 0) {
+      return;
+    }
+    fetchCompanies()
+      .then(data => {
+        if (!data) {
+          disableOptOut();
+          return;
+        }
+        if (data.active) {
+          companies = data.companies;
+          localStorage.setItem('optOutCompanies', JSON.stringify(companies));
+        } else {
+          hideOptOut();
+        }
+      });
+  }
+
+  function fetchCompanies() {
+    return fetch(companiesUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .catch((error) => {});
+  }
+
+  window.onload = initializeWidget;
 </script>
 </body>
 </html>
