@@ -42,7 +42,9 @@
         }
 
         .widget-button:disabled {
-            background-color: #00accd;
+            cursor: not-allowed;
+            opacity: .65;
+            box-shadow: none;
         }
 
         .widget-button:hover, .widget-button:active {
@@ -260,30 +262,33 @@
     const buttons = document.querySelectorAll('.widget-button');
     buttons.forEach(button => {
       button.disabled = true;
-      button.title = "Currently not available";
     });
   }
 
-  function hideOptOut() {
+  function toggleOptOut(displayWidget) {
     const container = document.querySelector('.widget-container');
-    container.style.display = 'none';
+    container.style.display = displayWidget ? 'block' : 'none';
   }
 
   function initializeWidget() {
     if (Array.isArray(companies) && companies.length > 0) {
       return;
     }
+    toggleOptOut(false);
     fetchCompanies()
       .then(data => {
-        if (!data) {
+        console.log("data", data);
+        if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
+          return;
+        }
+        toggleOptOut(true);
+        if (data?.active && !data?.companies?.length) {
           disableOptOut();
           return;
         }
         if (data.active) {
           companies = data.companies;
           localStorage.setItem('optOutCompanies', JSON.stringify(companies));
-        } else {
-          hideOptOut();
         }
       });
   }
