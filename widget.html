@@ -201,7 +201,7 @@
           }
         })
         .catch(error => {
-          console.error('Error during batch execution:', error);
+          console.error('Error batch execution:', error);
         });
     }
 
@@ -277,7 +277,6 @@
     toggleOptOut(false);
     fetchCompanies()
       .then(data => {
-        console.log("data", data);
         if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
           return;
         }
