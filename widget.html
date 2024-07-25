@@ -228,7 +228,7 @@
         try {
             resolvedURL = firstIframe.contentWindow.location.href;
         } catch (error) {
-          reject(error.message);
+          reject({error: error.message, participantId});
           return;
         }
         const urlParts = resolvedURL.split('/');
