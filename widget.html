@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>CCPA Tool</title>
     <style>
         .widget-container {
@@ -50,13 +51,51 @@
         .widget-button:hover, .widget-button:active {
             background-color: #0097b3;
         }
+
+        .widget-button::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            left: 65px;
+            display: none;
+        }
+
+        .widget-button.processing::before {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .widget-button .checkmark {
+            content: "✔";
+            font-size: 16px;
+            color: white;
+            margin-right: 10px;
+            display: none;
+        }
+
+        .widget-button.completed .checkmark {
+            display: inline-block;
+        }
+
+        .widget-button.completed::before {
+            display: none;
+        }
     </style>
 </head>
 <body>
 <div class="widget-container">
     <div class="company-list"><div id="company-list-content"></div></div>
     <button class="widget-button" onclick="toggleCompanyList()">Toggle Opt out modal</button>
-    <button class="widget-button" onclick="optOutAll()">Opt out companies</button>
+    <button class="widget-button" id="widget-button" onclick="optOutAll()">Opt out companies</button>
 </div>
 
 <script>
@@ -101,12 +140,32 @@
     companyListContainer.innerHTML = '';
 
     companies.forEach(company => {
-      const companyItem = document.createElement('button');
-      companyItem.className = 'widget-button';
-      companyItem.title = `ID: ${company.participantId}`;
-      companyItem.innerText = company.name;
-      companyItem.onclick = () => invokeOptOutIndividualCompany(company, createIframeChains);
-      companyListContainer.appendChild(companyItem);
+      const companyItemContainer = document.createElement('div');
+      companyItemContainer.style.display = 'flex';
+      companyItemContainer.style.alignItems = 'center';
+      companyItemContainer.style.marginBottom = '8px';
+
+      const companyItemButton = document.createElement('button');
+      companyItemButton.className = 'widget-button';
+      companyItemButton.title = `Participant ids: ${company.trigger.map(actionTrigger => actionTrigger.participantId).join()}. Daa participant id: ${company.trigger[0].daaParticipant}`;
+      companyItemButton.innerText = company.name;
+      companyItemButton.onclick = () => invokeOptOutIndividualCompany(company, createIframeChains);
+
+      const deleteButton = document.createElement('button');
+      deleteButton.innerText = 'X';
+      deleteButton.style.color = 'red';
+      deleteButton.style.margin = '10px 0 0 8px';
+      deleteButton.style.padding = '10px';
+      deleteButton.style.borderRadius = '4px';
+      deleteButton.style.borderWidth = '1px';
+      deleteButton.style.cursor = 'pointer';
+      deleteButton.onclick = () => {
+        window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: [], successful: [], discard: Array.from(new Set(company.trigger.map(comp => comp.daaParticipant)))}}, '*');
+      };
+
+      companyItemContainer.appendChild(companyItemButton);
+      companyItemContainer.appendChild(deleteButton);
+      companyListContainer.appendChild(companyItemContainer);
     });
   }
 
@@ -121,11 +180,24 @@
   }
 
   const invokeOptOutIndividualCompany = (company, cb) => {
+    const successDaaParticipants = [];
+    const failedDaaParticipants = [];
     const promises = company.trigger.map(actionTrigger =>
       handleOptOutForParticipantId(company.name, actionTrigger, cb)
+        .then(() => {
+          if (!successDaaParticipants.includes(actionTrigger.daaParticipant)) {
+            successDaaParticipants.push(actionTrigger.daaParticipant);
+          }
+        })
+        .catch(() => {
+          if (!successDaaParticipants.includes(actionTrigger.daaParticipant)) {
+            failedDaaParticipants.push(actionTrigger.daaParticipant);
+          }
+        })
     );
 
-    return Promise.all(promises).catch(() => {});
+    return Promise.all(promises)
+      .then(() => window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: failedDaaParticipants, successful: successDaaParticipants, discard: []}}, '*'));
   };
 
   function handleOptOutForParticipantId(companyName, actionTrigger, cb) {
@@ -134,7 +206,7 @@
       .then(({url}) => {
         console.log(`Data response from ${companyName} with participantId ${actionTrigger.participantId}:`, url);
         if (!analysedCompany?.hasOwnProperty('status')) {
-          return;
+          return actionTrigger;
         }
 
         if (analysedCompany.status === status.success || analysedCompany.status === status.successWhenNoAdBlocker) {
@@ -150,6 +222,8 @@
         } else {
           console.error('Company had an error on https://optout.aboutads.info/. Currently it`s successful');
         }
+
+        return actionTrigger;
       })
       .catch((error) => {
         console.error(`Error for ${companyName} with participantId ${actionTrigger.participantId}:`, error);
@@ -161,6 +235,8 @@
         } else {
           console.log('Company had an error on https://optout.aboutads.info/ as well.');
         }
+
+        throw error;
       });
   }
 
@@ -169,23 +245,50 @@
     const promises = [];
     const batchSize = 10; // Number of requests to send at a time
     const delay = 500; // Delay between batches in milliseconds
+    toggleWidgetButtonProcessing(true);
 
-    const tempCompanies = companies.slice(0,15);
-    tempCompanies.forEach(company => {
+    companies.forEach(company => {
       company.trigger.forEach(actionTrigger => {
-        promises.push(createIframeChains(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant));
+        promises.push(() => createIframeChains(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant));
       });
     });
 
     executeInBatches(promises, batchSize, delay);
   }
 
+  function toggleWidgetButtonProcessing(processing = true) {
+    const widgetButton = document.getElementById("widget-button");
+
+    if (!widgetButton) {
+      return;
+    }
+
+    if (processing) {
+      widgetButton.innerText = "Processing...";
+      widgetButton.classList.add("processing");
+      widgetButton.classList.remove("completed");
+      widgetButton.disabled = true;
+      return;
+    }
+
+    widgetButton.innerHTML = '<span class="checkmark">✔</span> Requests are completed';
+    widgetButton.classList.remove("processing");
+    widgetButton.classList.add("completed");
+    widgetButton.disabled = false;
+
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      widgetButton.innerText = "Opt out companies";
+    }, 2000);
+  }
+
+
   function executeInBatches(promises, batchSize, delay) {
     let batchIndex = 0;
     let allResults = [];
 
     function executeBatch() {
-      const batchPromises = promises.slice(batchIndex, batchIndex + batchSize);
+      const batchPromises = promises.slice(batchIndex, batchIndex + batchSize).map(fn => fn());
       return Promise.allSettled(batchPromises)
         .then((results) => {
           allResults = allResults.concat(results);
@@ -193,11 +296,14 @@
           if (batchIndex < promises.length) {
             setTimeout(executeBatch, delay);
           } else {
-            console.log("Detailed results", allResults);
-            const failures = allResults.filter(result => result.status === 'rejected').length;
-            console.log(`All actions completed. Number of companies with failures: ${failures}`);
+            toggleWidgetButtonProcessing(false);
+            // TODO remove
+            const failedDaaParticipants = allResults.filter(result => result.status === 'rejected').map(result => result.reason.daaParticipant);
             const successfulDaaParticipants = allResults.filter(result => result.status === 'fulfilled').map(result => result.value.daaParticipant);
+            console.log("Detailed results", allResults);
+            console.log(`All actions completed. Number of companies with failures: ${failedDaaParticipants.length}`);
             console.log(`Successful daa participants`, successfulDaaParticipants);
+            window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: failedDaaParticipants, successful: successfulDaaParticipants, discard: []}}, '*');
           }
         })
         .catch(error => {
@@ -226,9 +332,9 @@
 
       firstIframe.onload = () => {
         try {
-            resolvedURL = firstIframe.contentWindow.location.href;
+          resolvedURL = firstIframe.contentWindow.location.href;
         } catch (error) {
-          reject({error: error.message, participantId});
+          reject({error: error.message, participantId, daaParticipant});
           return;
         }
         const urlParts = resolvedURL.split('/');
@@ -242,18 +348,18 @@
             const secondIframeLocation = secondIframe.contentWindow.location.href;
             resolve({url: secondIframeLocation, daaParticipant});
           } catch (error) {
-            reject({error: error.message, participantId});
+            reject({error: error.message, participantId, daaParticipant});
           }
         };
 
         secondIframe.onerror = (error) => {
-          reject({error: error.message, participantId});
+          reject({error: error.message, participantId, daaParticipant});
         };
 
       };
 
       firstIframe.onerror = (error) => {
-        reject({error: error.message, participantId});
+        reject({error: error.message, participantId, daaParticipant});
       };
     });
   }
@@ -296,11 +402,11 @@
     return fetch(companiesUrl)
       .then(response => {
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          return {};
         }
         return response.json();
       })
-      .catch((error) => {});
+      .catch(() => {});
   }
 
   window.onload = initializeWidget;

@@ -3,1108 +3,1514 @@
   "companies": [
     {
       "name": "33Across",
-      "trigger": [
-        {
-          "url": "https://optout.33across.com/api/",
-          "participantId": 258,
-          "daaParticipant": "00236"
-        },
-        {
-          "url": "https://optout.33across.com/api/",
-          "participantId": 488,
-          "daaParticipant": "00236"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.33across.com/api/",
+            "participantId": 258,
+            "daaParticipant": "00236"
+          },
+          {
+            "url": "https://optout.33across.com/api/",
+            "participantId": 488,
+            "daaParticipant": "00236"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "AcuityAds",
-      "trigger": [
-        {
-          "url": "https://acuityplatform.com/Adserver/nai",
-          "participantId": 383,
-          "daaParticipant": "00643"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://acuityplatform.com/Adserver/nai",
+            "participantId": 383,
+            "daaParticipant": "00643"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Adbrain",
-      "trigger": [
-        {
-          "url": "https://insight.adsrvr.org/track/optout",
-          "participantId": 788,
-          "daaParticipant": "01195"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://insight.adsrvr.org/track/optout",
+            "participantId": 788,
+            "daaParticipant": "01195"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Adelphic",
-      "trigger": [
-        {
-          "url": "https://my.ipredictive.com/optout/aboutads",
-          "participantId": 642,
-          "daaParticipant": "00627"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://my.ipredictive.com/optout/aboutads",
+            "participantId": 642,
+            "daaParticipant": "00627"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Adform",
-      "trigger": [
-        {
-          "url": "https://track.adform.net/opt/nai",
-          "participantId": 858,
-          "daaParticipant": "01950"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://track.adform.net/opt/nai",
+            "participantId": 858,
+            "daaParticipant": "01950"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "AdGear Technologies",
-      "trigger": [
-        {
-          "url": "https://rtb.adgrx.com/coop/optout",
-          "participantId": 647,
-          "daaParticipant": "00688"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://rtb.adgrx.com/coop/optout",
+            "participantId": 647,
+            "daaParticipant": "00688"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Adobe Marketing Cloud - Advertising Services",
-      "trigger": [
-        {
-          "url": "https://www.demdex.net/daa/daa_opt.html",
-          "participantId": 512,
-          "daaParticipant": "00369"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.demdex.net/daa/daa_opt.html",
+            "participantId": 512,
+            "daaParticipant": "00369"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Adstra",
-      "trigger": [
-        {
-          "url": "https://preferences.bluecava.com/daa/optout.ashx",
-          "participantId": 569,
-          "daaParticipant": "00430"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://preferences.bluecava.com/daa/optout.ashx",
+            "participantId": 569,
+            "daaParticipant": "00430"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Amazon Ad System",
-      "trigger": [
-        {
-          "url": "https://s.amazon-adsystem.com/coop",
-          "participantId": 801,
-          "daaParticipant": "00205"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://s.amazon-adsystem.com/coop",
+            "participantId": 801,
+            "daaParticipant": "00205"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Amobee",
-      "trigger": [
-        {
-          "url": "https://r.turn.com/r/optout",
-          "participantId": 713,
-          "daaParticipant": "00313"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://r.turn.com/r/optout",
+            "participantId": 713,
+            "daaParticipant": "00313"
+          }
+        ],
+        "resourceUrls": [
+          "https://ad.amgdgt.com/ads/js/jquery-1.11.1.min.js",
+          "https://ad.amgdgt.com/ads/js/jquery.cookie.js",
+          "https://ad.amgdgt.com/ads/js/optout.js",
+          "https://ad.amgdgt.com/ads/opt-out?op=check&src=MST&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D-4818085208%26pf%3Damg%26st%3D",
+          "https://ad.amgdgt.com/ads/opt-out?op=set&src=MST&r=https%3A%2F%2Fcdn.amgdgt.com%2Fbase%2Fpixels%2Ftransparent.gif%3Fcb%3D696043167959409",
+          "https://ad.amgdgt.com/ads/opt-out?op=check&src=MST&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D-98136990784%26pf%3Damg%26st%3D",
+          "https://r.turn.com/r/optout?src=amobee&type=status&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D3204979775382749184%26pf%3Dturn%26st%3D",
+          "https://r.turn.com/r/optout?src=amobee&type=optOut&r=https%3A%2F%2Fcdn.amgdgt.com%2Fbase%2Fpixels%2Ftransparent.gif%3Fcb%3D20390730587087602",
+          "https://r.turn.com/r/optout?src=amobee&type=status&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D1585267068834414592%26pf%3Dturn%26st%3D",
+          "https://ingest.tidaltv.com/opt-out?op=givethestatus&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D913706512384%26pf%3Dvid%26st%3D",
+          "https://ingest.tidaltv.com/opt-out?op=optthemout&r=https%3A%2F%2Fcdn.amgdgt.com%2Fbase%2Fpixels%2Ftransparent.gif%3Fcb%3D14209981378418646",
+          "https://ingest.tidaltv.com/opt-out?op=givethestatus&r=http%3A%2F%2Fad.amgdgt.com%2Fads%2Fmaster-opt-out%3Fsrc%3DAMBP%26op%3Dreport%26tok%3D6298882213203148800%26pf%3Dvid%26st%3D"
+        ],
+        "createResource": []
+      }
     },
     {
       "name": "Audiencerate",
-      "trigger": [
-        {
-          "url": "https://optout.audrte.com/nai",
-          "participantId": 823,
-          "daaParticipant": "02139"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.audrte.com/nai",
+            "participantId": 823,
+            "daaParticipant": "02139"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "AuDigent",
-      "trigger": [
-        {
-          "url": "https://ids.ad.gt/api/v1/optout/nai",
-          "participantId": 811,
-          "daaParticipant": "01709"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ids.ad.gt/api/v1/optout/nai",
+            "participantId": 811,
+            "daaParticipant": "01709"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Basis",
-      "trigger": [
-        {
-          "url": "https://pixel-optout.sitescout.com/daaWebChoices",
-          "participantId": 879,
-          "daaParticipant": "00197"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pixel-optout.sitescout.com/daaWebChoices",
+            "participantId": 879,
+            "daaParticipant": "00197"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Beeswax",
-      "trigger": [
-        {
-          "url": "https://optout.prod.bidr.io/optout",
-          "participantId": 781,
-          "daaParticipant": "01310"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.prod.bidr.io/optout",
+            "participantId": 781,
+            "daaParticipant": "01310"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Bombora",
-      "trigger": [
-        {
-          "url": "https://ml314.com/daaoptout.ashx",
-          "participantId": 718,
-          "daaParticipant": "01299"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ml314.com/daaoptout.ashx",
+            "participantId": 718,
+            "daaParticipant": "01299"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Branch",
-      "trigger": [
-        {
-          "url": "https://app.link/nai-optout",
-          "participantId": 816,
-          "daaParticipant": "01724"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://app.link/nai-optout",
+            "participantId": 816,
+            "daaParticipant": "01724"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Cadent",
-      "trigger": [
-        {
-          "url": "https://choices.adhaven.com/choices/daa/optout",
-          "participantId": 809,
-          "daaParticipant": "00628"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://choices.adhaven.com/choices/daa/optout",
+            "participantId": 809,
+            "daaParticipant": "00628"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Catalina BuyerVision",
-      "trigger": [
-        {
-          "url": "https://www.agkn.com/nai",
-          "participantId": 880,
-          "daaParticipant": "00469"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.agkn.com/nai",
+            "participantId": 880,
+            "daaParticipant": "00469"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Chicory",
-      "trigger": [
-        {
-          "url": "https://e.chicoryapp.com/api/optout",
-          "participantId": 850,
-          "daaParticipant": "01955"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://e.chicoryapp.com/api/optout",
+            "participantId": 850,
+            "daaParticipant": "01955"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Choozle",
-      "trigger": [
-        {
-          "url": "https://insight.adsrvr.org/track/optout",
-          "participantId": 786,
-          "daaParticipant": "02105"
-        },
-        {
-          "url": "https://optout.addthis.com/web-choices/opt-out",
-          "participantId": 820,
-          "daaParticipant": "02105"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://insight.adsrvr.org/track/optout",
+            "participantId": 786,
+            "daaParticipant": "02105"
+          },
+          {
+            "url": "https://optout.addthis.com/web-choices/opt-out",
+            "participantId": 820,
+            "daaParticipant": "02105"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Claritas",
-      "trigger": [
-        {
-          "url": "https://optout.arttrk.com/1/e/optout.gif",
-          "participantId": 896,
-          "daaParticipant": "01981"
-        },
-        {
-          "url": "https://aa.trkn.us/1/e/optout.gif",
-          "participantId": 897,
-          "daaParticipant": "01981"
-        },
-        {
-          "url": "https://optout.adxcel-ec2.com/1/e/optout.gif",
-          "participantId": 895,
-          "daaParticipant": "01981"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.arttrk.com/1/e/optout.gif",
+            "participantId": 896,
+            "daaParticipant": "01981"
+          },
+          {
+            "url": "https://aa.trkn.us/1/e/optout.gif",
+            "participantId": 897,
+            "daaParticipant": "01981"
+          },
+          {
+            "url": "https://optout.adxcel-ec2.com/1/e/optout.gif",
+            "participantId": 895,
+            "daaParticipant": "01981"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Clickagy",
-      "trigger": [
-        {
-          "url": "https://aorta.clickagy.com/nai",
-          "participantId": 573,
-          "daaParticipant": "01955"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://aorta.clickagy.com/nai",
+            "participantId": 573,
+            "daaParticipant": "01955"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Cognitiv",
-      "trigger": [
-        {
-          "url": "https://beacon.lynx.cognitivlabs.com/daa/webchoices",
-          "participantId": 766,
-          "daaParticipant": "01312"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://beacon.lynx.cognitivlabs.com/daa/webchoices",
+            "participantId": 766,
+            "daaParticipant": "01312"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Connexity",
-      "trigger": [
-        {
-          "url": "https://www.shopzilla.com/opt_out_external",
-          "participantId": 611,
-          "daaParticipant": "00280"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.shopzilla.com/opt_out_external",
+            "participantId": 611,
+            "daaParticipant": "00280"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Conversant",
-      "trigger": [
-        {
-          "url": "https://login.dotomi.com/track/current/optout/all",
-          "participantId": 362,
-          "daaParticipant": "00111"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://login.dotomi.com/track/current/optout/all",
+            "participantId": 362,
+            "daaParticipant": "00111"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Criteo",
-      "trigger": [
-        {
-          "url": "https://privacy.criteo.com/api/nai/coop",
-          "participantId": 821,
-          "daaParticipant": "00168"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://privacy.criteo.com/api/nai/coop",
+            "participantId": 821,
+            "daaParticipant": "00168"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Datonics",
-      "trigger": [
-        {
-          "url": "https://pbid.pro-market.net/engine",
-          "participantId": 776,
-          "daaParticipant": "00240"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pbid.pro-market.net/engine",
+            "participantId": 776,
+            "daaParticipant": "00240"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Demandbase",
-      "trigger": [
-        {
-          "url": "https://segments.company-target.com/dnt",
-          "participantId": 762,
-          "daaParticipant": "01254"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://segments.company-target.com/dnt",
+            "participantId": 762,
+            "daaParticipant": "01254"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Dianomi",
-      "trigger": [
-        {
-          "url": "https://www.dianomi.com/cgi-bin/opt-out.pl",
-          "participantId": 875,
-          "daaParticipant": "02302"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.dianomi.com/cgi-bin/opt-out.pl",
+            "participantId": 875,
+            "daaParticipant": "02302"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "eBay",
-      "trigger": [
-        {
-          "url": "https://www.ebay.com/adchoice/daa",
-          "participantId": 851,
-          "daaParticipant": "00681"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.ebay.com/adchoice/daa",
+            "participantId": 851,
+            "daaParticipant": "00681"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Experian",
-      "trigger": [
-        {
-          "url": "https://r.turn.com/r/optout",
-          "participantId": 844,
-          "daaParticipant": "00186"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://r.turn.com/r/optout",
+            "participantId": 844,
+            "daaParticipant": "00186"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Eyeota",
-      "trigger": [
-        {
-          "url": "https://ps.eyeota.net/coop/nai/v2",
-          "participantId": 774,
-          "daaParticipant": "01259"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ps.eyeota.net/coop/nai/v2",
+            "participantId": 774,
+            "daaParticipant": "01259"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Flashtalking",
-      "trigger": [
-        {
-          "url": "https://servedby.flashtalking.com/dynamic/oba_us/adChoicesUS_obaurllink.html",
-          "participantId": 863,
-          "daaParticipant": "00304"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://servedby.flashtalking.com/dynamic/oba_us/adChoicesUS_obaurllink.html",
+            "participantId": 863,
+            "daaParticipant": "00304"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "FreeWheel",
-      "trigger": [
-        {
-          "url": "https://ads.stickyadstv.com/daa_optout",
-          "participantId": 864,
-          "daaParticipant": "00656"
-        },
-        {
-          "url": "https://cue.v.fwmrm.net/ad/daa_optout",
-          "participantId": 600,
-          "daaParticipant": "00656"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ads.stickyadstv.com/daa_optout",
+            "participantId": 864,
+            "daaParticipant": "00656"
+          },
+          {
+            "url": "https://cue.v.fwmrm.net/ad/daa_optout",
+            "participantId": 600,
+            "daaParticipant": "00656"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Google Inc.",
-      "trigger": [
-        {
-          "url": "https://googleads.g.doubleclick.net/ads/preferences/naioptout",
-          "participantId": 804,
-          "daaParticipant": "00220"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://googleads.g.doubleclick.net/ads/preferences/naioptout",
+            "participantId": 804,
+            "daaParticipant": "00220"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "GumGum",
-      "trigger": [
-        {
-          "url": "https://g2.gumgum.com/nai/coop/action",
-          "participantId": 785,
-          "daaParticipant": "00737"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://g2.gumgum.com/nai/coop/action",
+            "participantId": 785,
+            "daaParticipant": "00737"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Havas Edge",
-      "trigger": [
-        {
-          "url": "https://cookie.havasedge.com/daa/action",
-          "participantId": 856,
-          "daaParticipant": "01958"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://cookie.havasedge.com/daa/action",
+            "participantId": 856,
+            "daaParticipant": "01958"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Index Exchange",
-      "trigger": [
-        {
-          "url": "https://casalemedia.com/privacy/optout",
-          "participantId": 848,
-          "daaParticipant": "00295"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://casalemedia.com/privacy/optout",
+            "participantId": 848,
+            "daaParticipant": "00295"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Innovid",
-      "trigger": [
-        {
-          "url": "https://dts.innovid.com/dnt",
-          "participantId": 321
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://dts.innovid.com/dnt",
+            "participantId": 321,
+            "daaParticipant": "TODO-321"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Inuvo",
-      "trigger": [
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 838,
-          "daaParticipant": "00748"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 838,
+            "daaParticipant": "00748"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "IQM.com",
-      "trigger": [
-        {
-          "url": "https://pxl.iqm.com/api/v1/twb/opt_out",
-          "participantId": 789
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pxl.iqm.com/api/v1/twb/opt_out",
+            "participantId": 789,
+            "daaParticipant": "TODO-789"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Kargo Global",
-      "trigger": [
-        {
-          "url": "https://optout.kargo.com/nai",
-          "participantId": 745,
-          "daaParticipant": "00603"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.kargo.com/nai",
+            "participantId": 745,
+            "daaParticipant": "00603"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Knorex",
-      "trigger": [
-        {
-          "url": "https://tr.brand-display.com/tracking/api/aboutads",
-          "participantId": 640,
-          "daaParticipant": "01280"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://tr.brand-display.com/tracking/api/aboutads",
+            "participantId": 640,
+            "daaParticipant": "01280"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "LinkedIn",
-      "trigger": [
-        {
-          "url": "https://dc.ads.linkedin.com/nai/coop",
-          "participantId": 450,
-          "daaParticipant": "00598"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://dc.ads.linkedin.com/nai/coop",
+            "participantId": 450,
+            "daaParticipant": "00598"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "LiveIntent",
-      "trigger": [
-        {
-          "url": "https://d.liadm.com/coop",
-          "participantId": 634,
-          "daaParticipant": "00458"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://d.liadm.com/coop",
+            "participantId": 634,
+            "daaParticipant": "00458"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "LiveRamp",
-      "trigger": [
-        {
-          "url": "https://pippio.com/api/optout/nai",
-          "participantId": 865,
-          "daaParticipant": "00174"
-        },
-        {
-          "url": "https://www.rlcdn.com/about_ads.js",
-          "participantId": 603,
-          "daaParticipant": "00174"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pippio.com/api/optout/nai",
+            "participantId": 865,
+            "daaParticipant": "00174"
+          },
+          {
+            "url": "https://www.rlcdn.com/about_ads.js",
+            "participantId": 603,
+            "daaParticipant": "00174"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Lotame",
-      "trigger": [
-        {
-          "url": "https://optout.crwdcntrl.net/optout/nai_v2.0.php",
-          "participantId": 301,
-          "daaParticipant": "00105"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.crwdcntrl.net/optout/nai_v2.0.php",
+            "participantId": 301,
+            "daaParticipant": "00105"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Magnite",
-      "trigger": [
-        {
-          "url": "https://pixel.rubiconproject.com/oba/optout/",
-          "participantId": 366,
-          "daaParticipant": "01383"
-        },
-        {
-          "url": "https://analytics.ccgateway.net/privacy/nai",
-          "participantId": 885,
-          "daaParticipant": "01383"
-        },
-        {
-          "url": "https://vid.springserve.com/opt-out-daa",
-          "participantId": 886,
-          "daaParticipant": "01383"
-        },
-        {
-          "url": "https://optout.vhfp.net/daa",
-          "participantId": 887,
-          "daaParticipant": "01383"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pixel.rubiconproject.com/oba/optout/",
+            "participantId": 366,
+            "daaParticipant": "01383"
+          },
+          {
+            "url": "https://analytics.ccgateway.net/privacy/nai",
+            "participantId": 885,
+            "daaParticipant": "01383"
+          },
+          {
+            "url": "https://vid.springserve.com/opt-out-daa",
+            "participantId": 886,
+            "daaParticipant": "01383"
+          },
+          {
+            "url": "https://optout.vhfp.net/daa",
+            "participantId": 887,
+            "daaParticipant": "01383"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Media.net",
-      "trigger": [
-        {
-          "url": "https://oba.media.net/nai.php",
-          "participantId": 454,
-          "daaParticipant": "00747"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://oba.media.net/nai.php",
+            "participantId": 454,
+            "daaParticipant": "00747"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Mediaocean",
-      "trigger": [
-        {
-          "url": "https://go.4cinsights.com/v1/tracking/opt-out",
-          "participantId": 866,
-          "daaParticipant": "01710"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://go.4cinsights.com/v1/tracking/opt-out",
+            "participantId": 866,
+            "daaParticipant": "01710"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Merkle",
-      "trigger": [
-        {
-          "url": "https://mid.rkdms.com/wc-opt-out",
-          "participantId": 750,
-          "daaParticipant": "00241"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://mid.rkdms.com/wc-opt-out",
+            "participantId": 750,
+            "daaParticipant": "00241"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Microsoft",
-      "trigger": [
-        {
-          "url": "https://api.choice.microsoft.com/choice.optout",
-          "participantId": 824,
-          "daaParticipant": "00120"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://api.choice.microsoft.com/choice.optout",
+            "participantId": 824,
+            "daaParticipant": "00120"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "MiQ",
-      "trigger": [
-        {
-          "url": "https://s.amazon-adsystem.com/coop",
-          "participantId": 827,
-          "daaParticipant": "02079"
-        },
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 828,
-          "daaParticipant": "02079"
-        },
-        {
-          "url": "https://googleads.g.doubleclick.net/ads/preferences/naioptout",
-          "participantId": 829,
-          "daaParticipant": "02079"
-        },
-        {
-          "url": "https://insight.adsrvr.org/track/optout",
-          "participantId": 830,
-          "daaParticipant": "02079"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://s.amazon-adsystem.com/coop",
+            "participantId": 827,
+            "daaParticipant": "02079"
+          },
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 828,
+            "daaParticipant": "02079"
+          },
+          {
+            "url": "https://googleads.g.doubleclick.net/ads/preferences/naioptout",
+            "participantId": 829,
+            "daaParticipant": "02079"
+          },
+          {
+            "url": "https://insight.adsrvr.org/track/optout",
+            "participantId": 830,
+            "daaParticipant": "02079"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "MNTN",
-      "trigger": [
-        {
-          "url": "https://optout.steelhousemedia.com/nai",
-          "participantId": 375,
-          "daaParticipant": "00655"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.steelhousemedia.com/nai",
+            "participantId": 375,
+            "daaParticipant": "00655"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Nativo",
-      "trigger": [
-        {
-          "url": "https://jadserve.postrelease.com/naioptout",
-          "participantId": 755,
-          "daaParticipant": "01202"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://jadserve.postrelease.com/naioptout",
+            "participantId": 755,
+            "daaParticipant": "01202"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "NextRoll",
-      "trigger": [
-        {
-          "url": "https://d.adroll.com/optout/nai",
-          "participantId": 825,
-          "daaParticipant": "00267"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://d.adroll.com/optout/nai",
+            "participantId": 825,
+            "daaParticipant": "00267"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "OpenX",
-      "trigger": [
-        {
-          "url": "https://u.openx.net/privacy/daa",
-          "participantId": 765,
-          "daaParticipant": "00660"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://u.openx.net/privacy/daa",
+            "participantId": 765,
+            "daaParticipant": "00660"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Outbrain",
-      "trigger": [
-        {
-          "url": "https://nai.outbrain.com/",
-          "participantId": 756,
-          "daaParticipant": "01243"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://nai.outbrain.com/",
+            "participantId": 756,
+            "daaParticipant": "01243"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "OwnerIQ",
-      "trigger": [
-        {
-          "url": "https://px.owneriq.net/nai/optout",
-          "participantId": 591,
-          "daaParticipant": "00222"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://px.owneriq.net/nai/optout",
+            "participantId": 591,
+            "daaParticipant": "00222"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "PebblePost",
-      "trigger": [
-        {
-          "url": "https://daa.pbbl.co/optout",
-          "participantId": 852,
-          "daaParticipant": "02063"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://daa.pbbl.co/optout",
+            "participantId": 852,
+            "daaParticipant": "02063"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Pinterest",
-      "trigger": [
-        {
-          "url": "https://ct.pinterest.com/adchoices",
-          "participantId": 847,
-          "daaParticipant": "01672"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ct.pinterest.com/adchoices",
+            "participantId": 847,
+            "daaParticipant": "01672"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "PulsePoint",
-      "trigger": [
-        {
-          "url": "https://bh.contextweb.com/bh/oba/aboutads/",
-          "participantId": 422,
-          "daaParticipant": "00613"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://bh.contextweb.com/bh/oba/aboutads/",
+            "participantId": 422,
+            "daaParticipant": "00613"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Quantcast",
-      "trigger": [
-        {
-          "url": "https://pixel.quantserve.com/optout",
-          "participantId": 806,
-          "daaParticipant": "00256"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pixel.quantserve.com/optout",
+            "participantId": 806,
+            "daaParticipant": "00256"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Resonate",
-      "trigger": [
-        {
-          "url": "https://optout.reson8.com/optout",
-          "participantId": 837,
-          "daaParticipant": "00227"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.reson8.com/optout",
+            "participantId": 837,
+            "daaParticipant": "00227"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Responsys",
-      "trigger": [
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 779,
-          "daaParticipant": "00578"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 779,
+            "daaParticipant": "00578"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Roku's Advertising Services",
-      "trigger": [
-        {
-          "url": "https://i.w55c.net/optout/nai",
-          "participantId": 831,
-          "daaParticipant": "00654"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://i.w55c.net/optout/nai",
+            "participantId": 831,
+            "daaParticipant": "00654"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Samba.TV",
-      "trigger": [
-        {
-          "url": "https://ads.samba.tv/dnt_cookie",
-          "participantId": 842
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ads.samba.tv/dnt_cookie",
+            "participantId": 842,
+            "daaParticipant": "TODO-842"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Semasio",
-      "trigger": [
-        {
-          "url": "https://opt.semasio.net/optsvc/nai-optout",
-          "participantId": 815,
-          "daaParticipant": "01725"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://opt.semasio.net/optsvc/nai-optout",
+            "participantId": 815,
+            "daaParticipant": "01725"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "ShareThis",
-      "trigger": [
-        {
-          "url": "https://nai.sharethis.com",
-          "participantId": 835,
-          "daaParticipant": "00297"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://nai.sharethis.com",
+            "participantId": 835,
+            "daaParticipant": "00297"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Sharethrough",
-      "trigger": [
-        {
-          "url": "https://match.sharethrough.com/optout/daa",
-          "participantId": 876,
-          "daaParticipant": "00102"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://match.sharethrough.com/optout/daa",
+            "participantId": 876,
+            "daaParticipant": "00102"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Simpli.fi",
-      "trigger": [
-        {
-          "url": "https://optout.simpli.fi/nai_opt_out",
-          "participantId": 748,
-          "daaParticipant": "00377"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.simpli.fi/nai_opt_out",
+            "participantId": 748,
+            "daaParticipant": "00377"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Sizmek",
-      "trigger": [
-        {
-          "url": "https://oo.serving-sys.com/optout",
-          "participantId": 868,
-          "daaParticipant": "00289"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://oo.serving-sys.com/optout",
+            "participantId": 868,
+            "daaParticipant": "00289"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Skimlinks",
-      "trigger": [
-        {
-          "url": "https://optout.skimresources.com/networkadvertising",
-          "participantId": 836,
-          "daaParticipant": "01880"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.skimresources.com/networkadvertising",
+            "participantId": 836,
+            "daaParticipant": "01880"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Sojern",
-      "trigger": [
-        {
-          "url": "https://pixel.sojern.com/optout/do",
-          "participantId": 604,
-          "daaParticipant": "00178"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://pixel.sojern.com/optout/do",
+            "participantId": 604,
+            "daaParticipant": "00178"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Sonobi",
-      "trigger": [
-        {
-          "url": "https://go.sonobi.com/optout",
-          "participantId": 862,
-          "daaParticipant": "02210"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://go.sonobi.com/optout",
+            "participantId": 862,
+            "daaParticipant": "02210"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Sovrn",
-      "trigger": [
-        {
-          "url": "https://ap.lijit.com/cookie_opt_out",
-          "participantId": 742,
-          "daaParticipant": "01323"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ap.lijit.com/cookie_opt_out",
+            "participantId": 742,
+            "daaParticipant": "01323"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Springserve",
-      "trigger": [
-        {
-          "url": "https://vid.springserve.com/opt-out-daa",
-          "participantId": 878
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://vid.springserve.com/opt-out-daa",
+            "participantId": 878,
+            "daaParticipant": "TODO-878"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "StackAdapt",
-      "trigger": [
-        {
-          "url": "https://srv.stackadapt.com/daa",
-          "participantId": 894,
-          "daaParticipant": "01341"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://srv.stackadapt.com/daa",
+            "participantId": 894,
+            "daaParticipant": "01341"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Swoop",
-      "trigger": [
-        {
-          "url": "https://www.swpsvc.com/nai",
-          "participantId": 839,
-          "daaParticipant": "01967"
-        },
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 892,
-          "daaParticipant": "01967"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.swpsvc.com/nai",
+            "participantId": 839,
+            "daaParticipant": "01967"
+          },
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 892,
+            "daaParticipant": "01967"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Taboola",
-      "trigger": [
-        {
-          "url": "https://optout.taboola.com/",
-          "participantId": 673,
-          "daaParticipant": "01211"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.taboola.com/",
+            "participantId": 673,
+            "daaParticipant": "01211"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Tapad",
-      "trigger": [
-        {
-          "url": "https://privacy.tapad.com/daa-coop",
-          "participantId": 428,
-          "daaParticipant": "00406"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://privacy.tapad.com/daa-coop",
+            "participantId": 428,
+            "daaParticipant": "00406"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "The Nielsen Marketing Cloud",
-      "trigger": [
-        {
-          "url": "https://optout.exelator.com/load/OptOut.php",
-          "participantId": 364,
-          "daaParticipant": "00248"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.exelator.com/load/OptOut.php",
+            "participantId": 364,
+            "daaParticipant": "00248"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "The Trade Desk",
-      "trigger": [
-        {
-          "url": "https://insight.adsrvr.org/track/optout",
-          "participantId": 787,
-          "daaParticipant": "00131"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://insight.adsrvr.org/track/optout",
+            "participantId": 787,
+            "daaParticipant": "00131"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Throtle",
-      "trigger": [
-        {
-          "url": "https://optout.thrtle.com/optout",
-          "participantId": 770,
-          "daaParticipant": "01307"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.thrtle.com/optout",
+            "participantId": 770,
+            "daaParticipant": "01307"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Triplelift",
-      "trigger": [
-        {
-          "url": "https://eb2.3lift.com/daa/webchoices",
-          "participantId": 763,
-          "daaParticipant": "01339"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://eb2.3lift.com/daa/webchoices",
+            "participantId": 763,
+            "daaParticipant": "01339"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Twitter",
-      "trigger": [
-        {
-          "url": "https://analytics.twitter.com/daa/0/daa_optout_actions",
-          "participantId": 869,
-          "daaParticipant": "01296"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://analytics.twitter.com/daa/0/daa_optout_actions",
+            "participantId": 869,
+            "daaParticipant": "01296"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Undertone",
-      "trigger": [
-        {
-          "url": "https://ads.undertone.com/f",
-          "participantId": 431,
-          "daaParticipant": "00536"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ads.undertone.com/f",
+            "participantId": 431,
+            "daaParticipant": "00536"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Unruly Group LLC.",
-      "trigger": [
-        {
-          "url": "https://optout.1rx.io/naioptout",
-          "participantId": 732,
-          "daaParticipant": "00696"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.1rx.io/naioptout",
+            "participantId": 732,
+            "daaParticipant": "00696"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "UNTU",
-      "trigger": [
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 867,
-          "daaParticipant": "02209"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 867,
+            "daaParticipant": "02209"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Veeva Crossix",
-      "trigger": [
-        {
-          "url": "https://www.rlcdn.com/about_ads.js",
-          "participantId": 855,
-          "daaParticipant": "02112"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://www.rlcdn.com/about_ads.js",
+            "participantId": 855,
+            "daaParticipant": "02112"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Viant (Specific Media/Vindico)",
-      "trigger": [
-        {
-          "url": "https://notrack.adviva.net/new/CookieCheckTest.php",
-          "participantId": 553,
-          "daaParticipant": "01680"
-        },
-        {
-          "url": "https://notrack.specificclick.net/new/CookieCheckTest.php",
-          "participantId": 554,
-          "daaParticipant": "01680"
-        },
-        {
-          "url": "https://notrack.specificmedia.com/new/CookieCheckTest.php",
-          "participantId": 555,
-          "daaParticipant": "01680"
-        },
-        {
-          "url": "https://notrack.vindicosuite.com/new/CookieCheckTest.php",
-          "participantId": 556,
-          "daaParticipant": "01680"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://notrack.adviva.net/new/CookieCheckTest.php",
+            "participantId": 553,
+            "daaParticipant": "01680"
+          },
+          {
+            "url": "https://notrack.specificclick.net/new/CookieCheckTest.php",
+            "participantId": 554,
+            "daaParticipant": "01680"
+          },
+          {
+            "url": "https://notrack.specificmedia.com/new/CookieCheckTest.php",
+            "participantId": 555,
+            "daaParticipant": "01680"
+          },
+          {
+            "url": "https://notrack.vindicosuite.com/new/CookieCheckTest.php",
+            "participantId": 556,
+            "daaParticipant": "01680"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Wunderkind (formerly BounceX)",
-      "trigger": [
-        {
-          "url": "https://optout.cdnwidget.com",
-          "participantId": 802
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.cdnwidget.com",
+            "participantId": 802,
+            "daaParticipant": "TODO-802"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Xandr",
-      "trigger": [
-        {
-          "url": "https://ib.adnxs.com/aboutads",
-          "participantId": 361,
-          "daaParticipant": "01196"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ib.adnxs.com/aboutads",
+            "participantId": 361,
+            "daaParticipant": "01196"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Yahoo",
-      "trigger": [
-        {
-          "url": "https://guce.adaptv.advertising.com/ibaOptOut",
-          "participantId": 791,
-          "daaParticipant": "00147"
-        },
-        {
-          "url": "https://guce.adtech.de/ibaOptOut",
-          "participantId": 792,
-          "daaParticipant": "00147"
-        },
-        {
-          "url": "https://guce.adtechus.com/ibaOptOut",
-          "participantId": 794,
-          "daaParticipant": "00147"
-        },
-        {
-          "url": "https://guce.advertising.com/ibaOptOut",
-          "participantId": 795,
-          "daaParticipant": "00147"
-        },
-        {
-          "url": "https://guce.nexage.com/ibaOptOut",
-          "participantId": 797,
-          "daaParticipant": "00147"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://guce.adaptv.advertising.com/ibaOptOut",
+            "participantId": 791,
+            "daaParticipant": "00147"
+          },
+          {
+            "url": "https://guce.adtech.de/ibaOptOut",
+            "participantId": 792,
+            "daaParticipant": "00147"
+          },
+          {
+            "url": "https://guce.adtechus.com/ibaOptOut",
+            "participantId": 794,
+            "daaParticipant": "00147"
+          },
+          {
+            "url": "https://guce.advertising.com/ibaOptOut",
+            "participantId": 795,
+            "daaParticipant": "00147"
+          },
+          {
+            "url": "https://guce.nexage.com/ibaOptOut",
+            "participantId": 797,
+            "daaParticipant": "00147"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Yieldmo",
-      "trigger": [
-        {
-          "url": "https://ads.yieldmo.com/optout",
-          "participantId": 549,
-          "daaParticipant": "01218"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://ads.yieldmo.com/optout",
+            "participantId": 549,
+            "daaParticipant": "01218"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Zeta Global",
-      "trigger": [
-        {
-          "url": "https://disqus.com/privacy/optout/",
-          "participantId": 817,
-          "daaParticipant": "01342"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://disqus.com/privacy/optout/",
+            "participantId": 817,
+            "daaParticipant": "01342"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     },
     {
       "name": "Ziff Davis",
-      "trigger": [
-        {
-          "url": "https://optout.ugo.com/opt-out/request",
-          "participantId": 627,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.pcmag.com/opt-out/request",
-          "participantId": 614,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.extremetech.com/opt-out/request",
-          "participantId": 615,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.techbargains.com/opt-out/request",
-          "participantId": 631,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.ziffdavis.com/opt-out/request",
-          "participantId": 632,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.zdbb.net/opt-out/request",
-          "participantId": 633,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.ign.com/opt-out/request",
-          "participantId": 618,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.askmen.com/opt-out/request",
-          "participantId": 619,
-          "daaParticipant": "00119"
-        },
-        {
-          "url": "https://optout.1up.com/opt-out/request",
-          "participantId": 620,
-          "daaParticipant": "00119"
-        }
-      ]
+      "trigger": {
+        "actions": [
+          {
+            "url": "https://optout.ugo.com/opt-out/request",
+            "participantId": 627,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.pcmag.com/opt-out/request",
+            "participantId": 614,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.extremetech.com/opt-out/request",
+            "participantId": 615,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.techbargains.com/opt-out/request",
+            "participantId": 631,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.ziffdavis.com/opt-out/request",
+            "participantId": 632,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.zdbb.net/opt-out/request",
+            "participantId": 633,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.ign.com/opt-out/request",
+            "participantId": 618,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.askmen.com/opt-out/request",
+            "participantId": 619,
+            "daaParticipant": "00119"
+          },
+          {
+            "url": "https://optout.1up.com/opt-out/request",
+            "participantId": 620,
+            "daaParticipant": "00119"
+          }
+        ],
+        "resourceUrls": [],
+        "createResource": []
+      }
     }
   ]
 }
