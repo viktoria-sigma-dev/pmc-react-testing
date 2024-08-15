@@ -100,6 +100,7 @@
 
 <script>
   const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
+  const parseUrlRegex = /^(?:https?:\/\/[^\/]+\/[^\/]+\/)([^\/]+)\/[^\/]+\/([^\/]+)/;
   let companies = JSON.parse(localStorage.getItem('optOutCompanies') || '[]');
 
   const successInOptOutAboutAds = "Request is success";
@@ -244,7 +245,7 @@
   function optOutAll() {
     const promises = [];
     const batchSize = 10; // Number of requests to send at a time
-    const delay = 500; // Delay between batches in milliseconds
+    const delay = 10; // Delay between batches in milliseconds
     toggleWidgetButtonProcessing(true);
 
     companies.forEach(company => {
@@ -346,6 +347,15 @@
         secondIframe.onload = () => {
           try {
             const secondIframeLocation = secondIframe.contentWindow.location.href;
+            const [resHost, resParticipantId, resStatus] = secondIframeLocation.match(parseUrlRegex) || [];
+            if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
+              reject({error: "Participant ids do not match!", participantId, daaParticipant});
+              return;
+            }
+            if (resStatus && !resStatus.startsWith("1")) {
+              reject({error: "Result is not successful!", participantId, daaParticipant});
+              return;
+            }
             resolve({url: secondIframeLocation, daaParticipant});
           } catch (error) {
             reject({error: error.message, participantId, daaParticipant});
