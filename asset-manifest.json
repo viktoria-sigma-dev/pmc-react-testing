@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/pmc-react-testing/static/js/main.652f39b8.js",
+    "main.js": "/pmc-react-testing/static/js/main.e9da6028.js",
     "index.html": "/pmc-react-testing/index.html",
-    "main.652f39b8.js.map": "/pmc-react-testing/static/js/main.652f39b8.js.map"
+    "main.e9da6028.js.map": "/pmc-react-testing/static/js/main.e9da6028.js.map"
   },
   "entrypoints": [
-    "static/js/main.652f39b8.js"
+    "static/js/main.e9da6028.js"
   ]
 }
