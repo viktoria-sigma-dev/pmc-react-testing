@@ -325,54 +325,63 @@
 
   function createIframeChains(participantId, url, daaParticipant) {
     return new Promise((resolve, reject) => {
-      let resolvedURL;
-      const firstIframe = document.createElement('iframe');
-      const testUrl = `${url}?action_id=3&participant_id=${participantId}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
-      console.log("test url", testUrl, window.location.origin);
-      firstIframe.src = getIframeUrl({originUrl: url, actionId: 3, participantId, location: window.location.origin});
-      firstIframe.style.display = 'none';
-      document.body.appendChild(firstIframe);
+      try {
+        let resolvedURL;
+        const firstIframe = document.createElement('iframe');
+        firstIframe.src = getIframeUrl({originUrl: url, actionId: 3, participantId, location: window.location.origin});
+        firstIframe.style.display = 'none';
+        document.body.appendChild(firstIframe);
 
-      firstIframe.onload = () => {
-        try {
-          resolvedURL = firstIframe.contentWindow.location.href;
-        } catch (error) {
-          reject({error: error.message, participantId, daaParticipant});
-          return;
-        }
-        const urlParts = resolvedURL.split('/');
-        const secondIframe = document.createElement('iframe');
-        secondIframe.src = getIframeUrl({originUrl: url, actionId: 4, participantId, token: urlParts[urlParts.length - 1], location: window.location.origin});
-        secondIframe.style.display = 'none';
-        document.body.appendChild(secondIframe);
-
-        secondIframe.onload = () => {
+        firstIframe.onload = () => {
           try {
-            const secondIframeLocation = secondIframe.contentWindow.location.href;
-            const [resHost, resParticipantId, resStatus] = secondIframeLocation.match(parseUrlRegex) || [];
-            if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
-              reject({error: "Participant ids do not match!", participantId, daaParticipant});
-              return;
-            }
-            if (resStatus && !resStatus.startsWith("1")) {
-              reject({error: "Result is not successful!", participantId, daaParticipant});
-              return;
-            }
-            resolve({url: secondIframeLocation, daaParticipant});
+            resolvedURL = firstIframe.contentWindow.location.href;
+            console.log("firstIframe.onload resolvedURL", resolvedURL);
           } catch (error) {
+            console.log("firstIframe.onload catch", error);
             reject({error: error.message, participantId, daaParticipant});
+            return;
           }
+          const urlParts = resolvedURL.split('/');
+          const secondIframe = document.createElement('iframe');
+          secondIframe.src = getIframeUrl({originUrl: url, actionId: 4, participantId, token: urlParts[urlParts.length - 1], location: window.location.origin});
+          secondIframe.style.display = 'none';
+          document.body.appendChild(secondIframe);
+
+          secondIframe.onload = () => {
+            try {
+              const secondIframeLocation = secondIframe.contentWindow.location.href;
+              console.log("secondIframe.onload resolvedURL", secondIframeLocation);
+              const [resHost, resParticipantId, resStatus] = secondIframeLocation.match(parseUrlRegex) || [];
+              if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
+                reject({error: "Participant ids do not match!", participantId, daaParticipant});
+                return;
+              }
+              if (resStatus && !resStatus.startsWith("1")) {
+                console.log("secondIframe reject resStatus", resStatus);
+                reject({error: "Result is not successful!", participantId, daaParticipant});
+                return;
+              }
+              console.log("secondIframe resolve secondIframeLocation", secondIframeLocation);
+              resolve({url: secondIframeLocation, daaParticipant});
+            } catch (error) {
+              console.log("secondIframe reject error.message", error.message);
+              reject({error: error.message, participantId, daaParticipant});
+            }
+          };
+
+          secondIframe.onerror = (error) => {
+            reject({error: error.message, participantId, daaParticipant});
+          };
+
         };
 
-        secondIframe.onerror = (error) => {
+        firstIframe.onerror = (error) => {
+          console.log("firstIframe.onerror", error);
           reject({error: error.message, participantId, daaParticipant});
         };
-
-      };
-
-      firstIframe.onerror = (error) => {
-        reject({error: error.message, participantId, daaParticipant});
-      };
+      } catch (error) {
+        console.log("global catch", error);
+      }
     });
   }
 
