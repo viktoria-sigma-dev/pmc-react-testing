@@ -327,6 +327,8 @@
     return new Promise((resolve, reject) => {
       let resolvedURL;
       const firstIframe = document.createElement('iframe');
+      const testUrl = `${url}?action_id=3&participant_id=${participantId}&rd=${encodeURIComponent(window.location.origin)}&noCache=${getRandomizedValue()}`;
+      console.log("test url", testUrl, window.location.origin);
       firstIframe.src = getIframeUrl({originUrl: url, actionId: 3, participantId, location: window.location.origin});
       firstIframe.style.display = 'none';
       document.body.appendChild(firstIframe);
