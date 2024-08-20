@@ -334,6 +334,11 @@
 
         firstIframe.onload = () => {
           try {
+            console.log("firstIframe.contentWindow.location", firstIframe.contentWindow.location);
+            console.log("window.location.origin", window.location.origin);
+            // if (firstIframe.contentWindow.location.href.startsWith(window.location.origin)) {
+
+            }
             resolvedURL = firstIframe.contentWindow.location.href;
             console.log("firstIframe.onload resolvedURL", resolvedURL);
           } catch (error) {
