@@ -100,6 +100,7 @@
 
 <script>
   const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
+  const widgetUrl = "https://d3tcjj8eoorxjp.cloudfront.net";
   const parseUrlRegex = /^(?:https?:\/\/[^\/]+\/[^\/]+\/)([^\/]+)\/[^\/]+\/([^\/]+)/;
   let companies = JSON.parse(localStorage.getItem('optOutCompanies') || '[]');
 
@@ -333,9 +334,12 @@
 
       firstIframe.onload = () => {
         try {
-          console.log("firstIframe.contentWindow.location", firstIframe.contentWindow.location);
-          console.log("window.location.origin", window.location.origin);
           resolvedURL = firstIframe.contentWindow.location.href;
+          const resolvedOrigin = new URL(resolvedURL).origin;
+          if (resolvedOrigin !== widgetUrl) {
+            reject({error: `Resolved URL origin ${resolvedOrigin} does not match the allowed origin ${widgetUrl}`, participantId, daaParticipant});
+            return;
+          }
         } catch (error) {
           reject({error: error.message, participantId, daaParticipant});
           return;
