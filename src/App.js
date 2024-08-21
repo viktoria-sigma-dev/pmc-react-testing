@@ -7,6 +7,7 @@ import {GPCAvailability} from "./components/GPCAvailability";
 function App() {
   const [adPreferencesValue, setAdPreferencesValue] = useState("");
   const [currentAdPreferencesValue, setCurrentAdPreferencesValue] = useState("");
+  const [optedOutCompanies, setOptedOutCompanies] = useState(null);
 
   /* Emulate vendor.js. Listen preferences value from extension */
   useEffect(() => {
@@ -17,6 +18,10 @@ function App() {
       if (event.data.type === "AdPreferences") {
         console.log("React skeleton application, preferences received", event.data);
         setCurrentAdPreferencesValue(event.data.data);
+      }
+      if (event.data.type === "OptedOutCompanies") {
+        console.log("React skeleton application, opted out companies received", event.data);
+        setOptedOutCompanies(event.data.data ?? {successful: [], failed: []});
       }
     });
   }, []);
@@ -47,11 +52,29 @@ function App() {
     window.postMessage({type: 'SetUserLocation', data}, '*');
   }
 
+  const requestOptedOutCompanies = () => {
+    window.postMessage({ type: "GetOptedOutCompanies" }, "*");
+  };
+
   return (
     <div className="App" style={{paddingBottom: "200px"}}>
       <div style={{backgroundColor: "#D6D9DC"}}>
         <p>Emulate vendor.js:</p>
         <p>Current (extension) ad preferences value: {currentAdPreferencesValue}</p>
+        <div>
+          <button onClick={requestOptedOutCompanies}>
+            Request Opted-Out Companies
+          </button>
+          <br/>
+          {optedOutCompanies && (
+            <>
+              <b>Successful DAA participants:&nbsp;</b>
+              {optedOutCompanies.successful.length ? <span>{optedOutCompanies.successful.join(", ")}</span> : "-"}<br/>
+              <b>Failed DAA participants:&nbsp;</b>
+              {optedOutCompanies.failed.length ? <span>{optedOutCompanies.failed.join(", ")}</span> : "-"}
+            </>
+          )}
+        </div>
       </div>
       <br/><br/><br/><br/><br/><br/>
       <div style={{backgroundColor: "#EDF5FD"}}>
@@ -70,6 +93,16 @@ function App() {
       <EncodeAdPreferencesString/>
       <br/><br/><br/><br/><br/><br/>
       <DecodeAdPreferencesString/>
+      <br/><br/><br/><br/><br/><br/>
+      <div style={{backgroundColor: 'rgb(255, 236, 224)', padding: '20px'}}>
+        <iframe
+          title="Widget1"
+          src="https://d3tcjj8eoorxjp.cloudfront.net"
+          width="300"
+          height="400"
+          style={{border: 'none'}}
+        />
+      </div>
     </div>
   );
 }

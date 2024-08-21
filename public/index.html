@@ -28,16 +28,24 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+<!--    <iframe src="%PUBLIC_URL%/widget.html" width="300" height="400" style="position: fixed; bottom: 20px; right: 20px; border: none; z-index: 9999;"></iframe>-->
+    <iframe src="https://d3tcjj8eoorxjp.cloudfront.net" title="Widget" width="300" height="400" style="position: fixed; bottom: 20px; right: 20px; border: none; z-index: 9999;"></iframe>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <script type="text/javascript">
+      /*if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker__cache.js')
+            .then(() => console.log('Service Worker: Registered.'))
+            .catch((error) => console.error(`Service Worker: ${error.message}.`));
+        })
+      }*/
+      /*if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./service-worker__indexeddb.js')
+                  .then(() => console.log('Service Worker: Registered.'))
+                  .catch((error) => console.error(`Service Worker: ${error.message}.`));
+        })
+      }*/
+    </script>
   </body>
 </html>
