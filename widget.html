@@ -184,7 +184,7 @@
   }
 
   const invokeOptOutIndividualCompany = (company, cb) => {
-    if (isChrome) {
+    if (!isChrome) {
       window.top.postMessage({
         type: 'UpdateOptedOutCompanies',
         data: {failed: [], discard: [], successful: [...new Set(company.trigger.map(trigger => trigger.daaParticipant))]}
@@ -258,7 +258,7 @@
 
   // ----------------- Production codebase
   function optOutAll() {
-    if (isChrome) {
+    if (!isChrome) {
       toggleWidgetButtonProcessing();
       window.top.postMessage({
         type: 'UpdateOptedOutCompanies',
