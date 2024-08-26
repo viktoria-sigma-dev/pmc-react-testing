@@ -103,7 +103,6 @@
   const widgetUrl = "https://d3tcjj8eoorxjp.cloudfront.net";
   const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
   const resultUrlRegex = /^(?:https?:\/\/[^\/]+\/finish\/([^\/]+)\/[^\/]+\/([^\/]+))\/?$/;
-  const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) && !/Edg/.test(navigator.userAgent);
   let companies = JSON.parse(localStorage.getItem('optOutCompanies') || '[]');
 
   const successInOptOutAboutAds = "Request is success";
@@ -184,13 +183,6 @@
   }
 
   const invokeOptOutIndividualCompany = (company, cb) => {
-    if (isChrome) {
-      window.top.postMessage({
-        type: 'UpdateOptedOutCompanies',
-        data: {failed: [], discard: [], successful: [...new Set(company.trigger.map(trigger => trigger.daaParticipant))]}
-      }, '*');
-      return;
-    }
     const successDaaParticipants = [];
     const failedDaaParticipants = [];
     const promises = company.trigger.map(actionTrigger =>
@@ -213,12 +205,7 @@
 
   function handleOptOutForParticipantId(companyName, actionTrigger, cb) {
     const analysedCompany = analysedCompanies.find(company => company.participantId === actionTrigger.participantId);
-    return cb({
-        url: actionTrigger.url,
-        actionId: actionTrigger.actionId,
-        participantId: actionTrigger.participantId,
-        daaParticipant: actionTrigger.daaParticipant
-      })
+    return cb(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant)
       .then(({url}) => {
         console.log(`Data response from ${companyName} with participantId ${actionTrigger.participantId}:`, url);
         if (!analysedCompany?.hasOwnProperty('status')) {
@@ -258,18 +245,6 @@
 
   // ----------------- Production codebase
   function optOutAll() {
-    if (isChrome) {
-      toggleWidgetButtonProcessing();
-      window.top.postMessage({
-        type: 'UpdateOptedOutCompanies',
-        data: {
-          failed: [],
-          discard: [],
-          successful: [...new Set(companies.flatMap(company => company.trigger.map(trigger => trigger.daaParticipant)))]
-        }
-      }, '*');
-      return;
-    }
     const promises = [];
     const batchSize = 10; // Number of requests to send at a time
     const delay = 10; // Delay between batches in milliseconds
@@ -277,11 +252,7 @@
 
     companies.forEach(company => {
       company.trigger.forEach(actionTrigger => {
-        promises.push(() => createIframeChains({
-          url: actionTrigger.url,
-          actionId: actionTrigger.actionId,
-          participantId: actionTrigger.participantId,
-          daaParticipant: actionTrigger.daaParticipant}));
+        promises.push(() => createIframeChains(actionTrigger.participantId, actionTrigger.url, actionTrigger.daaParticipant));
       });
     });
 
@@ -354,78 +325,59 @@
     return `${originUrl}?action_id=${actionId}&participant_id=${participantId}&${token ? `token=${token}&` : ''}rd=${encodeURIComponent(location)}&noCache=${getRandomizedValue()}`;
   }
 
-  function iframeLoad({iframeSrc, widgetUrl}) {
+  function createIframeChains(participantId, url, daaParticipant) {
     return new Promise((resolve, reject) => {
-      const iframe = document.createElement('iframe');
-      iframe.src = iframeSrc;
-      iframe.style.display = 'none';
-      document.body.appendChild(iframe);
-      iframe.onload = () => {
+      let resolvedURL;
+      const firstIframe = document.createElement('iframe');
+      firstIframe.src = getIframeUrl({originUrl: url, actionId: 3, participantId, location: window.location.origin});
+      firstIframe.style.display = 'none';
+      document.body.appendChild(firstIframe);
+
+      firstIframe.onload = () => {
         try {
-          const resolvedURL = iframe.contentWindow.location.href;
-          const foundOrigin = new URL(resolvedURL).origin;
-          if (new URL(resolvedURL).origin !== widgetUrl) {
-            reject(`Resolved URL origin ${foundOrigin} does not match the allowed origin ${widgetUrl}`);
+          resolvedURL = firstIframe.contentWindow.location.href;
+          const resolvedOrigin = new URL(resolvedURL).origin;
+          if (resolvedOrigin !== widgetUrl) {
+            reject({error: `Resolved URL origin ${resolvedOrigin} does not match the allowed origin ${widgetUrl}`, participantId, daaParticipant});
+            return;
           }
-
-          resolve(resolvedURL);
         } catch (error) {
-          reject(error);
+          reject({error: error.message, participantId, daaParticipant});
+          return;
         }
-      }
-      iframe.onerror = (error) => {
-        reject(error);
+        const [resHost, token] = resolvedURL.match(tokenUrlRegex) || [];
+        const secondIframe = document.createElement('iframe');
+        secondIframe.src = getIframeUrl({originUrl: url, actionId: 4, participantId, token, location: window.location.origin});
+        secondIframe.style.display = 'none';
+        document.body.appendChild(secondIframe);
+
+        secondIframe.onload = () => {
+          try {
+            const secondIframeLocation = secondIframe.contentWindow.location.href;
+            const [resHost, resParticipantId, resStatus] = secondIframeLocation.match(resultUrlRegex) || [];
+            if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
+              reject({error: "Participant ids do not match!", participantId, daaParticipant});
+              return;
+            }
+            if (resStatus && !resStatus.startsWith("1")) {
+              reject({error: "Result is not successful!", participantId, daaParticipant});
+              return;
+            }
+            resolve({url: secondIframeLocation, daaParticipant});
+          } catch (error) {
+            reject({error: error.message, participantId, daaParticipant});
+          }
+        };
+
+        secondIframe.onerror = (error) => {
+          reject({error: error.message, participantId, daaParticipant});
+        };
+
       };
-    });
-  }
 
-  function processIframeResult({ iframeLocation, participantId }) {
-    const [_, resParticipantId, resStatus] = iframeLocation.match(resultUrlRegex) || [];
-    if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
-      throw new Error(`Participant ids do not match!`);
-    }
-    if (resStatus && !resStatus.startsWith("1")) {
-      throw new Error(`Result is not successful!`);
-    }
-    return iframeLocation;
-  }
-
-  function createIframeChains({ url, actionId, participantId, daaParticipant }) {
-    return new Promise((resolve, reject) => {
-      if (actionId === 3) {
-        iframeLoad({
-          iframeSrc: getIframeUrl({ originUrl: url, actionId: 3, participantId, location: window.location.origin }),
-          widgetUrl
-        })
-          .then((resolvedURL) => {
-            const [_, token] = resolvedURL.match(tokenUrlRegex) || [];
-            return iframeLoad({
-              iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token, location: window.location.origin }),
-              widgetUrl
-            });
-          })
-          .then((iframeLocation) => {
-            const url = processIframeResult({ iframeLocation, participantId });
-            resolve({ url, participantId, daaParticipant });
-          })
-          .catch((error) => {
-            reject({ error: error.message, participantId, daaParticipant });
-          });
-      } else if (actionId === 4) {
-        iframeLoad({
-          iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token: null, location: window.location.origin }),
-          widgetUrl
-        })
-          .then((iframeLocation) => {
-            const url = processIframeResult({ iframeLocation, participantId });
-            resolve({ url, participantId, daaParticipant });
-          })
-          .catch((error) => {
-            reject({ error: error.message, participantId, daaParticipant });
-          });
-      } else {
-        reject({ error: `Unknown actionId=${actionId}`, participantId, daaParticipant });
-      }
+      firstIframe.onerror = (error) => {
+        reject({error: error.message, participantId, daaParticipant});
+      };
     });
   }
 
