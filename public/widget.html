@@ -104,7 +104,7 @@
   const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
   const resultUrlRegex = /^(?:https?:\/\/[^\/]+\/finish\/([^\/]+)\/[^\/]+\/([^\/]+))\/?$/;
   const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) && !/Edg/.test(navigator.userAgent);
-  let companies = JSON.parse(localStorage.getItem('optOutCompanies') || '[]');
+  let companies = [];
 
   const successInOptOutAboutAds = "Request is success";
   const status = {
@@ -151,7 +151,7 @@
 
       const companyItemButton = document.createElement('button');
       companyItemButton.className = 'widget-button';
-      companyItemButton.title = `Participant ids: ${company.trigger.map(actionTrigger => actionTrigger.participantId).join()}. Daa participant id: ${company.trigger[0].daaParticipant}`;
+      companyItemButton.title = `Participant ids: ${company.trigger.actions.map(actionTrigger => actionTrigger.participantId).join()}. Daa participant id: ${company.trigger.actions[0].daaParticipant}`;
       companyItemButton.innerText = company.name;
       companyItemButton.onclick = () => invokeOptOutIndividualCompany(company, createIframeChains);
 
@@ -164,7 +164,7 @@
       deleteButton.style.borderWidth = '1px';
       deleteButton.style.cursor = 'pointer';
       deleteButton.onclick = () => {
-        window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: [], successful: [], discard: Array.from(new Set(company.trigger.map(comp => comp.daaParticipant)))}}, '*');
+        window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: [], successful: [], discard: Array.from(new Set(company.trigger.actions.map(comp => comp.daaParticipant)))}}, '*');
       };
 
       companyItemContainer.appendChild(companyItemButton);
@@ -187,13 +187,13 @@
     if (!isChrome) {
       window.top.postMessage({
         type: 'UpdateOptedOutCompanies',
-        data: {failed: [], discard: [], successful: [...new Set(company.trigger.map(trigger => trigger.daaParticipant))]}
+        data: {failed: [], discard: [], successful: [...new Set(company.trigger.actions.map(trigger => trigger.daaParticipant))]}
       }, '*');
       return;
     }
     const successDaaParticipants = [];
     const failedDaaParticipants = [];
-    const promises = company.trigger.map(actionTrigger =>
+    const promises = company.trigger.actions.map(actionTrigger =>
       handleOptOutForParticipantId(company.name, actionTrigger, cb)
         .then(() => {
           if (!successDaaParticipants.includes(actionTrigger.daaParticipant)) {
@@ -265,7 +265,7 @@
         data: {
           failed: [],
           discard: [],
-          successful: [...new Set(companies.flatMap(company => company.trigger.map(trigger => trigger.daaParticipant)))]
+          successful: [...new Set(companies.flatMap(company => company.trigger.actions.map(trigger => trigger.daaParticipant)))]
         }
       }, '*');
       return;
@@ -276,7 +276,7 @@
     toggleWidgetButtonProcessing(true);
 
     companies.forEach(company => {
-      company.trigger.forEach(actionTrigger => {
+      company.trigger.actions.forEach(actionTrigger => {
         promises.push(() => createIframeChains({
           url: actionTrigger.url,
           actionId: actionTrigger.actionId,
@@ -364,7 +364,7 @@
         try {
           const resolvedURL = iframe.contentWindow.location.href;
           const foundOrigin = new URL(resolvedURL).origin;
-          if (new URL(resolvedURL).origin !== widgetUrl) {
+          if (foundOrigin !== widgetUrl) {
             reject(`Resolved URL origin ${foundOrigin} does not match the allowed origin ${widgetUrl}`);
           }
 
@@ -429,36 +429,35 @@
     });
   }
 
-  function disableOptOut() {
+  function disableWidgetAvailability() {
     const buttons = document.querySelectorAll('.widget-button');
     buttons.forEach(button => {
       button.disabled = true;
     });
   }
 
-  function toggleOptOut(displayWidget) {
+  function toggleWidgetAvailability(displayWidget) {
     const container = document.querySelector('.widget-container');
     container.style.display = displayWidget ? 'block' : 'none';
   }
 
   function initializeWidget() {
-    if (Array.isArray(companies) && companies.length > 0) {
+    if (new URL(document.location.href).href !== new URL(widgetUrl).href) {
       return;
     }
-    toggleOptOut(false);
+    toggleWidgetAvailability(false);
     fetchCompanies()
       .then(data => {
         if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
           return;
         }
-        toggleOptOut(true);
+        toggleWidgetAvailability(true);
         if (data?.active && !data?.companies?.length) {
-          disableOptOut();
+          disableWidgetAvailability();
           return;
         }
         if (data.active) {
           companies = data.companies;
-          localStorage.setItem('optOutCompanies', JSON.stringify(companies));
         }
       });
   }
