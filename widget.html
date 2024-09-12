@@ -104,7 +104,7 @@
   const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
   const resultUrlRegex = /^(?:https?:\/\/[^\/]+\/finish\/([^\/]+)\/[^\/]+\/([^\/]+))\/?$/;
   const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) && !/Edg/.test(navigator.userAgent);
-  let companies;
+  let companies = [];
 
   const successInOptOutAboutAds = "Request is success";
   const status = {
@@ -275,7 +275,7 @@
     const delay = 10; // Delay between batches in milliseconds
     toggleWidgetButtonProcessing(true);
 
-    companies.slice(0,3).forEach(company => {
+    companies.forEach(company => {
       company.trigger.actions.forEach(actionTrigger => {
         promises.push(() => createIframeChains({
           url: actionTrigger.url,
@@ -354,17 +354,17 @@
     return `${originUrl}?action_id=${actionId}&participant_id=${participantId}&${token ? `token=${token}&` : ''}rd=${encodeURIComponent(location)}&noCache=${getRandomizedValue()}`;
   }
 
-  function iframeLoad({iframeSrc, widgetUrl, parentIframe}) {
+  function iframeLoad({iframeSrc, widgetUrl}) {
     return new Promise((resolve, reject) => {
       const iframe = document.createElement('iframe');
       iframe.src = iframeSrc;
       iframe.style.display = 'none';
-      parentIframe.appendChild(iframe);
+      document.body.appendChild(iframe);
       iframe.onload = () => {
         try {
           const resolvedURL = iframe.contentWindow.location.href;
           const foundOrigin = new URL(resolvedURL).origin;
-          if (new URL(resolvedURL).origin !== widgetUrl) {
+          if (foundOrigin !== widgetUrl) {
             reject(`Resolved URL origin ${foundOrigin} does not match the allowed origin ${widgetUrl}`);
           }
 
@@ -392,21 +392,15 @@
 
   function createIframeChains({ url, actionId, participantId, daaParticipant }) {
     return new Promise((resolve, reject) => {
-      const tempIframe = document.createElement('iframe');
-      tempIframe.src = "about:blank";
-      tempIframe.style.display = 'none';
-      document.body.appendChild(tempIframe);
       if (actionId === 3) {
         iframeLoad({
           iframeSrc: getIframeUrl({ originUrl: url, actionId: 3, participantId, location: window.location.origin }),
-          parentIframe: tempIframe,
           widgetUrl
         })
           .then((resolvedURL) => {
             const [_, token] = resolvedURL.match(tokenUrlRegex) || [];
             return iframeLoad({
               iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token, location: window.location.origin }),
-              parentIframe: tempIframe,
               widgetUrl
             });
           })
@@ -420,7 +414,6 @@
       } else if (actionId === 4) {
         iframeLoad({
           iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token: null, location: window.location.origin }),
-          parentIframe: tempIframe,
           widgetUrl
         })
           .then((iframeLocation) => {
@@ -449,11 +442,7 @@
   }
 
   function initializeWidget() {
-    console.log("initializeWidget", document.location.href);
-    /*if (new URL(document.location.href).href !== new URL(widgetUrl).href) {
-      return;
-    }*/
-    if (Array.isArray(companies) && companies.length > 0) {
+    if (new URL(document.location.href).href !== new URL(widgetUrl).href) {
       return;
     }
     toggleWidgetAvailability(false);
@@ -468,7 +457,6 @@
           return;
         }
         if (data.active) {
-          console.log("fetchCompanies were triggered, assigning to variable")
           companies = data.companies;
         }
       });
