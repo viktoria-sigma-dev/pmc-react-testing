@@ -99,6 +99,16 @@
 </div>
 
 <script>
+
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'FROM_EXTENSION_1') {
+      console.log('Received message from Extension 1:', event.data.message);
+
+      // Relay the message to Extension 2 via another postMessage
+      window.postMessage({ type: 'TO_EXTENSION_2', message: event.data.message }, '*');
+    }
+  });
+
   const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
   const widgetUrl = "https://d3tcjj8eoorxjp.cloudfront.net";
   const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
