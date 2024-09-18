@@ -429,13 +429,6 @@
     });
   }
 
-  function disableWidgetAvailability() {
-    const buttons = document.querySelectorAll('.widget-button');
-    buttons.forEach(button => {
-      button.disabled = true;
-    });
-  }
-
   function toggleWidgetAvailability(displayWidget) {
     const container = document.querySelector('.widget-container');
     container.style.display = displayWidget ? 'block' : 'none';
@@ -451,13 +444,12 @@
         if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
           return;
         }
-        toggleWidgetAvailability(true);
         if (data?.active && !data?.companies?.length) {
-          disableWidgetAvailability();
           return;
         }
         if (data.active) {
           companies = data.companies;
+          toggleWidgetAvailability(true);
         }
       });
   }
