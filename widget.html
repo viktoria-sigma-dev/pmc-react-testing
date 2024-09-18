@@ -29,19 +29,6 @@
             text-align: center;
         }
 
-        .company-list {
-            position: absolute;
-            bottom: calc(100% + 10px);
-            right: 0;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            max-height: 270px;
-            overflow-y: auto;
-            display: none;
-        }
-
         .widget-button:disabled {
             cursor: not-allowed;
             opacity: .65;
@@ -93,180 +80,17 @@
 </head>
 <body>
 <div class="widget-container">
-    <div class="company-list"><div id="company-list-content"></div></div>
-    <button class="widget-button" onclick="toggleCompanyList()">Toggle Opt out modal</button>
     <button class="widget-button" id="widget-button" onclick="optOutAll()">Opt out companies</button>
 </div>
 
 <script>
-
-  window.addEventListener('message', (event) => {
-    if (event.data.type === 'FROM_EXTENSION_1') {
-      console.log('Received message from Extension 1:', event.data.message);
-
-      // Relay the message to Extension 2 via another postMessage
-      window.postMessage({ type: 'TO_EXTENSION_2', message: event.data.message }, '*');
-    }
-  });
-
-  const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
-  const widgetUrl = "https://d3tcjj8eoorxjp.cloudfront.net";
+  const companiesUrl = "https://s3.amazonaws.com/widget-production.com/companies.json";
+  const widgetUrl = "https://d2r0xny6oyiap.cloudfront.net";
   const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
   const resultUrlRegex = /^(?:https?:\/\/[^\/]+\/finish\/([^\/]+)\/[^\/]+\/([^\/]+))\/?$/;
   const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor) && !/Edg/.test(navigator.userAgent);
   let companies = [];
 
-  const successInOptOutAboutAds = "Request is success";
-  const status = {
-    fail: 'fail',
-    success: 'success',
-    successWhenNoAdBlocker: 'successWhenNoAdBlocker',
-  }
-  const analysedCompanies = [
-    {participantId: 512, name: 'Adobe Marketing Cloud - Advertising Services', url: 'https://www.demdex.net/daa/daa_opt.html', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['no-url, request went right to action_id=4', 'https://optout.aboutads.info/finish/512/4/1/']},
-    {participantId: 789, name: 'IQM', url: 'https://pxl.iqm.com/api/v1/twb/opt_out', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/789/1/29c20b7f96c7d51421db9667dc879d78', 'https://optout.aboutads.info/finish/789/4/1']},
-    {participantId: 756, name: 'OutBrain', url: 'https://nai.outbrain.com', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/756/1-1/4e88341cb0b64fae985401c4e618c638', 'https://optout.aboutads.info/finish/756/4/1-1/']},
-    {participantId: 787, name: 'The Trade Desk', url: 'https://insight.adsrvr.org/track/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/787/3-3/062424142252', 'https://optout.aboutads.info/finish/787/4/1-1/User Opted Out']},
-
-    {participantId: 258, name: '33Across', url: 'https://optout.33across.com/api/', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/258/1/b8b4bedfd79e9ada/', 'https://optout.aboutads.info/finish/258/4/1/']},
-    {participantId: 488, name: '33Across (alternative)', url: 'https://optout.tynt.com/api/', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/488/1/b8b4bedfd79e9ada/', 'https://optout.aboutads.info/finish/488/4/1/']},
-    {participantId: 383, name: 'AcuityAds', url: 'https://acuityplatform.com/Adserver/nai', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/383/1/de9FDqymUa/', 'https://optout.aboutads.info/finish/383/4/1/']},
-    {participantId: 788, name: 'Adbrain', url: 'https://insight.adsrvr.org/track/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/788/1-2/062424134419/', 'https://optout.aboutads.info/finish/788/4/1-1/User Opted Out/']},
-    {participantId: 642, name: 'Adelphic', url: 'https://my.ipredictive.com/optout/aboutads', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/642/1/adelphic', 'https://optout.aboutads.info/finish/642/4/1/adelphic']},
-    {participantId: 858, name: 'Adform', url: 'https://track.adform.net/opt/nai', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/858/1-1/_GawbSkyWMQDvP-67D9Y4w', 'https://optout.aboutads.info/finish/858/4/1-0']},
-    {participantId: 647, name: 'AdGear Technologies', url: 'https://rtb.adgrx.com/coop/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/647/1/878307127/', 'https://optout.aboutads.info/finish/647/4/1/']},
-    {participantId: 569, name: 'Adstra', url: 'https://preferences.bluecava.com/daa/optout.ashx', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/569/1/bluecava-csrf/', 'https://optout.aboutads.info/finish/569/4/1/']},
-    {participantId: 768, name: 'Alphonso', url: 'https://optout.alphonso.tv/optout_v1', status: status.fail, hint: 'Bad request 400 to Location https://match.prod.bidr.io/cookie-sync/alphonso?_bee_ppp=1'},
-    {participantId: 801, name: 'Amazon Ad System', url: 'https://s.amazon-adsystem.com/coop', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/801/1/1435f06c3f120d2a930194f8088fe345', 'https://optout.aboutads.info/finish/801/4/1/ok']},
-    {participantId: 636, name: 'Amobee', url: 'https://ad.amgdgt.com/ads/nai-coop-opt-out', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://ad.amgdgt.com/ads/master-opt-out?src=NAI&action_id=3&participant_id=636&rd=https://optout.aboutads.info&noCache=1719238321678', 'https://optout.aboutads.info/finish/636/4/1/success/']},
-    {participantId: 713, name: 'Amobee (alternative)', url: 'https://r.turn.com/r/optout', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/713/1-3/', 'https://optout.aboutads.info/finish/713/4/1-1/']},
-    {participantId: 823, name: 'Audiencerate', url: 'https://optout.audrte.com/nai', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/823/1-0', 'https://optout.aboutads.info/finish/823/4/1-0']},
-    {participantId: 811, name: 'AuDigent', url: 'https://ids.ad.gt/api/v1/optout/nai', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/811/1-0', 'https://optout.aboutads.info/token/811/1-0']},
-    {participantId: 879, name: 'Basis', url: 'https://pixel-optout.sitescout.com/daaWebChoices', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['no-url, request went right to action_id=4', 'https://optout.aboutads.info/finish/879/4/1']},
-    {participantId: 781, name: 'Beeswax', url: 'https://optout.prod.bidr.io/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/781/2/0b9490d1f38e', 'https://optout.aboutads.info/finish/781/4/1']},
-    {participantId: 718, name: 'Bombora', url: 'https://ml314.com/daaoptout.ashx', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/718/1/dG9rZW4tYm9tYm9yYQ==/', 'https://optout.aboutads.info/finish/718/4/1/']},
-    {participantId: 816, name: 'Branch', url: 'https://app.link/nai-optout', status: status.success, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/816/1-0', 'https://optout.aboutads.info/finish/816/4/1-0/optedOut']},
-    {participantId: 809, name: 'Cadent', url: 'https://choices.adhaven.com/choices/daa/optout', status: status.successWhenNoAdBlocker, hint: successInOptOutAboutAds, exactUrls: ['https://optout.aboutads.info/token/809/1-2/', 'https://optout.aboutads.info/finish/809/4/1-1/']},
-  ];
-
-  function renderCompanyList() {
-    const companyListContainer = document.getElementById('company-list-content');
-    companyListContainer.innerHTML = '';
-
-    companies.forEach(company => {
-      const companyItemContainer = document.createElement('div');
-      companyItemContainer.style.display = 'flex';
-      companyItemContainer.style.alignItems = 'center';
-      companyItemContainer.style.marginBottom = '8px';
-
-      const companyItemButton = document.createElement('button');
-      companyItemButton.className = 'widget-button';
-      companyItemButton.title = `Participant ids: ${company.trigger.actions.map(actionTrigger => actionTrigger.participantId).join()}. Daa participant id: ${company.trigger.actions[0].daaParticipant}`;
-      companyItemButton.innerText = company.name;
-      companyItemButton.onclick = () => invokeOptOutIndividualCompany(company, createIframeChains);
-
-      const deleteButton = document.createElement('button');
-      deleteButton.innerText = 'X';
-      deleteButton.style.color = 'red';
-      deleteButton.style.margin = '10px 0 0 8px';
-      deleteButton.style.padding = '10px';
-      deleteButton.style.borderRadius = '4px';
-      deleteButton.style.borderWidth = '1px';
-      deleteButton.style.cursor = 'pointer';
-      deleteButton.onclick = () => {
-        window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: [], successful: [], discard: Array.from(new Set(company.trigger.actions.map(comp => comp.daaParticipant)))}}, '*');
-      };
-
-      companyItemContainer.appendChild(companyItemButton);
-      companyItemContainer.appendChild(deleteButton);
-      companyListContainer.appendChild(companyItemContainer);
-    });
-  }
-
-  function toggleCompanyList() {
-    const companyList = document.querySelector('.company-list');
-    if (companyList.style.display === 'none' || companyList.style.display === '') {
-      companyList.style.display = 'block';
-      renderCompanyList(companies);
-    } else {
-      companyList.style.display = 'none';
-    }
-  }
-
-  const invokeOptOutIndividualCompany = (company, cb) => {
-    if (!isChrome) {
-      window.top.postMessage({
-        type: 'UpdateOptedOutCompanies',
-        data: {failed: [], discard: [], successful: [...new Set(company.trigger.actions.map(trigger => trigger.daaParticipant))]}
-      }, '*');
-      return;
-    }
-    const successDaaParticipants = [];
-    const failedDaaParticipants = [];
-    const promises = company.trigger.actions.map(actionTrigger =>
-      handleOptOutForParticipantId(company.name, actionTrigger, cb)
-        .then(() => {
-          if (!successDaaParticipants.includes(actionTrigger.daaParticipant)) {
-            successDaaParticipants.push(actionTrigger.daaParticipant);
-          }
-        })
-        .catch(() => {
-          if (!successDaaParticipants.includes(actionTrigger.daaParticipant)) {
-            failedDaaParticipants.push(actionTrigger.daaParticipant);
-          }
-        })
-    );
-
-    return Promise.all(promises)
-      .then(() => window.top.postMessage({type: 'UpdateOptedOutCompanies', data: {failed: failedDaaParticipants, successful: successDaaParticipants, discard: []}}, '*'));
-  };
-
-  function handleOptOutForParticipantId(companyName, actionTrigger, cb) {
-    const analysedCompany = analysedCompanies.find(company => company.participantId === actionTrigger.participantId);
-    return cb({
-        url: actionTrigger.url,
-        actionId: actionTrigger.actionId,
-        participantId: actionTrigger.participantId,
-        daaParticipant: actionTrigger.daaParticipant
-      })
-      .then(({url}) => {
-        console.log(`Data response from ${companyName} with participantId ${actionTrigger.participantId}:`, url);
-        if (!analysedCompany?.hasOwnProperty('status')) {
-          return actionTrigger;
-        }
-
-        if (analysedCompany.status === status.success || analysedCompany.status === status.successWhenNoAdBlocker) {
-          console.log('Company was successful on https://optout.aboutads.info/ as well.');
-
-          const responseUrlPath = new URL(url).pathname;
-          const expectedUrlPath = new URL(analysedCompany.exactUrls[analysedCompany.exactUrls.length - 1]).pathname;
-          if (expectedUrlPath === responseUrlPath) {
-            console.log('Final url is the same.');
-          } else {
-            console.error(`Final url is the different. Current url is ${responseUrlPath}, expected url is ${expectedUrlPath}`);
-          }
-        } else {
-          console.error('Company had an error on https://optout.aboutads.info/. Currently it`s successful');
-        }
-
-        return actionTrigger;
-      })
-      .catch((error) => {
-        console.error(`Error for ${companyName} with participantId ${actionTrigger.participantId}:`, error);
-        if (!analysedCompany) {
-          return;
-        }
-        if (analysedCompany.status === status.success || analysedCompany.status === status.successWhenNoAdBlocker) {
-          console.error('Company was successful on https://optout.aboutads.info/. Currently it`s errored');
-        } else {
-          console.log('Company had an error on https://optout.aboutads.info/ as well.');
-        }
-
-        throw error;
-      });
-  }
-
-  // ----------------- Production codebase
   function optOutAll() {
     if (!isChrome) {
       toggleWidgetButtonProcessing(false);
@@ -323,7 +147,6 @@
       widgetButton.innerText = "Opt out companies";
     }, 2000);
   }
-
 
   function executeInBatches(promises, batchSize, delay) {
     let batchIndex = 0;
@@ -439,16 +262,9 @@
     });
   }
 
-  function disableWidgetAvailability() {
-    const buttons = document.querySelectorAll('.widget-button');
-    buttons.forEach(button => {
-      button.disabled = true;
-    });
-  }
-
   function toggleWidgetAvailability(displayWidget) {
-    const container = document.querySelector('.widget-container');
-    container.style.display = displayWidget ? 'block' : 'none';
+    const iframeElement = parent.document.getElementById('pmc-widget');
+    iframeElement.style.display = displayWidget ? 'block' : 'none';
   }
 
   function initializeWidget() {
@@ -461,13 +277,12 @@
         if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
           return;
         }
-        toggleWidgetAvailability(true);
         if (data?.active && !data?.companies?.length) {
-          disableWidgetAvailability();
           return;
         }
         if (data.active) {
           companies = data.companies;
+          toggleWidgetAvailability(true);
         }
       });
   }
