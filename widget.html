@@ -447,7 +447,7 @@
         if (data?.active && !data?.companies?.length) {
           return;
         }
-        if (data.active) {
+        if (!data.active) {
           companies = data.companies;
           toggleWidgetAvailability(true);
         }
