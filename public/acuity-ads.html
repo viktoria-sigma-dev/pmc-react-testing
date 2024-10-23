@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AcuityAds</title>
+</head>
+<script>
+  const companiesUrl = 'https://s3.amazonaws.com/widget-duplicated.com/companies.json';
+  const widgetUrl = "https://d3tcjj8eoorxjp.cloudfront.net";
+  const tokenUrlRegex = /^https?:\/\/[^\/]+\/token\/[^\/]+\/[^\/]+\/([^\/]+)\/?$/;
+  const resultUrlRegex = /^(?:https?:\/\/[^\/]+\/finish\/([^\/]+)\/[^\/]+\/([^\/]+))\/?$/;
+  let companies = [];
+
+  function getIframeUrl({originUrl, actionId, participantId, token, location}) {
+    function getRandomizedValue() {
+      return Math.floor(Math.random() * 9e12) + 1e12;
+    }
+
+    return `${originUrl}?action_id=${actionId}&participant_id=${participantId}&${token ? `token=${token}&` : ''}rd=${encodeURIComponent(location)}&noCache=${getRandomizedValue()}`;
+  }
+
+  function iframeLoad({iframeSrc, widgetUrl}) {
+    return new Promise((resolve, reject) => {
+      const iframe = document.createElement('iframe');
+      iframe.src = iframeSrc;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.onload = () => {
+        try {
+          const resolvedURL = iframe.contentWindow.location.href;
+
+          resolve(resolvedURL);
+        } catch (error) {
+          reject(error);
+        }
+      }
+      iframe.onerror = (error) => {
+        reject(error);
+      };
+    });
+  }
+
+  function processIframeResult({ iframeLocation, participantId }) {
+    const [_, resParticipantId, resStatus] = iframeLocation.match(resultUrlRegex) || [];
+    if (!isNaN(Number(resParticipantId)) && participantId !== Number(resParticipantId)) {
+      throw new Error(`Participant ids do not match!`);
+    }
+    if (resStatus && !resStatus.startsWith("1")) {
+      throw new Error(`Result is not successful!`);
+    }
+    return iframeLocation;
+  }
+
+  function createIframeChains({ url, actionId, participantId, daaParticipant }) {
+    return new Promise((resolve, reject) => {
+      if (actionId === 3) {
+        iframeLoad({
+          iframeSrc: getIframeUrl({ originUrl: url, actionId: 3, participantId, location: window.location.origin }),
+          widgetUrl
+        })
+                .then((resolvedURL) => {
+                  const [_, token] = resolvedURL.match(tokenUrlRegex) || [];
+                  return iframeLoad({
+                    iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token, location: window.location.origin }),
+                    widgetUrl
+                  });
+                })
+                .then((iframeLocation) => {
+                  const url = processIframeResult({ iframeLocation, participantId });
+                  console.log("SUCCESS!!!");
+                  resolve({ url, participantId, daaParticipant });
+                })
+                .catch((error) => {
+                  reject({ error: error.message, participantId, daaParticipant });
+                });
+      } else if (actionId === 4) {
+        iframeLoad({
+          iframeSrc: getIframeUrl({ originUrl: url, actionId: 4, participantId, token: null, location: window.location.origin }),
+          widgetUrl
+        })
+                .then((iframeLocation) => {
+                  const url = processIframeResult({ iframeLocation, participantId });
+                  console.log("SUCCESS!!!");
+                  resolve({ url, participantId, daaParticipant });
+                })
+                .catch((error) => {
+                  reject({ error: error.message, participantId, daaParticipant });
+                });
+      } else {
+        reject({ error: `Unknown actionId=${actionId}`, participantId, daaParticipant });
+      }
+    });
+  }
+
+  function toggleWidgetAvailability(displayWidget) {
+    const container = document.querySelector('.widget-container');
+    container.style.display = displayWidget ? 'block' : 'none';
+  }
+
+  function initializeWidget() {
+    if (new URL(document.location.href).href !== new URL(widgetUrl).href) {
+      return;
+    }
+    toggleWidgetAvailability(false);
+    fetchCompanies()
+            .then(data => {
+              if (!data || !data.hasOwnProperty('active') || !data.hasOwnProperty('companies') || !data?.active) {
+                return;
+              }
+              if (data?.active && !data?.companies?.length) {
+                return;
+              }
+              if (data.active) {
+                companies = data.companies;
+                toggleWidgetAvailability(true);
+              }
+            });
+  }
+
+  function fetchCompanies() {
+    return fetch(companiesUrl)
+            .then(response => {
+              if (!response.ok) {
+                return {};
+              }
+              return response.json();
+            })
+            .catch(() => {});
+  }
+
+  window.onload = initializeWidget;
+</script>
+<body>
+<button style="color:red; width: 150px; height: 80px" onclick='
+  createIframeChains({
+      url: "https://acuityplatform.com/Adserver/nai",
+      actionId: 3,
+      participantId: 383,
+      daaParticipant: "00643"
+    })
+'>Trigger AcuityAds</button>
+</body>
+</html>
