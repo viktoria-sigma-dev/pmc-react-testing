@@ -2,6 +2,7 @@ import {BINARY_CONFIG, CHOICE_STATUS} from "../constants/adStringGenerator";
 import {convertToBinary} from "../util/binaryConverter";
 import {binaryToBase64} from "../util/base64Converter";
 import {useState} from "react";
+import {convertBase64toBase64URL} from "../util/base64URLConverter";
 
 export const EncodeAdPreferencesString = () => {
   const defaultExample = {
@@ -24,12 +25,15 @@ export const EncodeAdPreferencesString = () => {
   const [data, setData] = useState(JSON.stringify(defaultExample));
   const [binary, setBinary] = useState(null);
   const [base64, setBase64] = useState(null);
+  const [base64URL, setBase64URL] = useState(null);
 
   const generateAdPreferencesString = (adStringPreferencesData) => {
     const binaryConvertedResult = convertToBinary(adStringPreferencesData, BINARY_CONFIG);
     setBinary(binaryConvertedResult);
     const base64 = binaryToBase64(binaryConvertedResult);
     setBase64(base64);
+    const base64URL = convertBase64toBase64URL(base64);
+    setBase64URL(base64URL);
   }
 
   const validateUnexpectedKeys = (parsedJson) => {
@@ -39,7 +43,7 @@ export const EncodeAdPreferencesString = () => {
       if (Array.isArray(parsedJson[key])) {
         const uniqueUnexpectedKeys = Object.keys(parsedJson[key].reduce(function(result, obj) {
           return Object.assign(result, obj);
-        }, {})).filter(unexpectedKey => !Object.keys(BINARY_CONFIG[key]).includes(unexpectedKey));;
+        }, {})).filter(unexpectedKey => !Object.keys(BINARY_CONFIG[key]).includes(unexpectedKey));
 
         unexpectedKeys = unexpectedKeys.concat(uniqueUnexpectedKeys);
       }
@@ -52,6 +56,7 @@ export const EncodeAdPreferencesString = () => {
     try {
       setBinary("");
       setBase64("");
+      setBase64URL("");
       const parsedJson = JSON.parse(data);
       setTextAreaError(null); // Clear any previous errors
 
@@ -85,7 +90,8 @@ export const EncodeAdPreferencesString = () => {
       <div style={{marginTop: "50px"}}>
         <button onClick={encode}>Encode</button><br/><br/>
         <div style={{wordWrap: "break-word"}}>Binary: {binary}</div><br/><br/>
-        <div style={{wordWrap: "break-word"}}>Base64: {base64}</div>
+        <div style={{wordWrap: "break-word"}}>Base64: {base64}</div><br/><br/>
+        <div style={{wordWrap: "break-word"}}>Base64URL: {base64URL}</div>
       </div>
     </div>
   );
